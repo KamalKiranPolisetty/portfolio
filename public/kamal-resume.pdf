@@ -1,0 +1,100 @@
+%PDF-1.4
+1 0 obj
+<<
+/Title (Kamal Kiran Polisetty - Resume)
+/Author (Kamal Kiran Polisetty)
+/Subject (Resume)
+/Producer (PDF Placeholder)
+/CreationDate (D:20230715000000Z)
+>>
+endobj
+2 0 obj
+<<
+/Type /Catalog
+/Pages 3 0 R
+>>
+endobj
+3 0 obj
+<<
+/Type /Pages
+/Kids [4 0 R]
+/Count 1
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/Parent 3 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+/ProcSet [/PDF /Text]
+>>
+/MediaBox [0 0 612 792]
+/Contents 6 0 R
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+6 0 obj
+<<
+/Length 676
+>>
+stream
+BT
+/F1 24 Tf
+50 700 Td
+(Kamal Kiran Polisetty) Tj
+/F1 12 Tf
+0 -20 Td
+(Full Stack Developer) Tj
+0 -15 Td
+(kamalkiranpolisetty@gmail.com | github.com/kamalkiranpolisetty | linkedin.com/in/kamalkiranpolisetty) Tj
+0 -40 Td
+/F1 16 Tf
+(Experience) Tj
+/F1 12 Tf
+0 -20 Td
+(Full Stack Developer, Capgemini | Aug 2021 - Present) Tj
+0 -40 Td
+/F1 16 Tf
+(Education) Tj
+/F1 12 Tf
+0 -20 Td
+(Master of Science in Computer Science, Texas State University | 2018 - 2019) Tj
+0 -40 Td
+/F1 16 Tf
+(Skills) Tj
+/F1 12 Tf
+0 -20 Td
+(JavaScript, TypeScript, React, Node.js, Express, MongoDB, PostgreSQL, AWS, Azure) Tj
+0 -100 Td
+/F1 10 Tf
+(This is a placeholder PDF. Please replace with your actual resume.) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000158 00000 n 
+0000000207 00000 n 
+0000000264 00000 n 
+0000000412 00000 n 
+0000000479 00000 n 
+trailer
+<<
+/Size 7
+/Root 2 0 R
+/Info 1 0 R
+>>
+startxref
+1206
+%%EOF

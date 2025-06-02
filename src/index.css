@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 221 83% 53%;
+    --primary-hover: 217 91% 60%;
+    --secondary: 10 73% 54%;
+    --secondary-hover: 6 78% 57%;
+    --accent: 262 83% 58%;
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --border: 214.3 31.8% 91.4%;
+  }
+
+  .dark {
+    --primary: 217 91% 60%;
+    --primary-hover: 221 83% 53%;
+    --secondary: 10 73% 54%;
+    --secondary-hover: 6 78% 57%;
+    --accent: 280 100% 70%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --border: 217 33% 17%;
+  }
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    @apply antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .container {
+    @apply px-4 md:px-6 mx-auto max-w-7xl;
+  }
+
+  /* Skill badges */
+  .skill-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-blue-500 dark:bg-blue-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-blue-600 dark:bg-blue-500;
+  }
+
+  /* Project card hover effect */
+  .project-card {
+    @apply transition-all duration-500;
+  }
+
+  .project-card:hover .project-overlay {
+    @apply opacity-95;
+  }
+
+  .project-card:hover .project-content {
+    @apply translate-y-0 opacity-100;
+  }
+
+  /* Timeline styles */
+  .timeline-container {
+    @apply relative;
+  }
+
+  .timeline-container::after {
+    content: '';
+    @apply absolute top-0 bottom-0 left-[calc(2rem-1px)] w-0.5 bg-blue-200 dark:bg-blue-900;
+  }
+
+  .timeline-item {
+    @apply relative pl-16 pb-10;
+  }
+
+  .timeline-dot {
+    @apply absolute left-0 top-1 z-10 w-4 h-4 rounded-full bg-blue-500 dark:bg-blue-400;
+  }
+}
