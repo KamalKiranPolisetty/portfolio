@@ -15,11 +15,14 @@ import LoadingScreen from './components/LoadingScreen';
 
 function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme === 'dark' || 
-      (savedTheme === null && 
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ? 'dark' : 'light';
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme === 'dark' || 
+        (savedTheme === null && 
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ? 'dark' : 'light';
+    }
+    return 'light';
   });
   
   const [loading, setLoading] = useState(true);
@@ -45,6 +48,10 @@ function App() {
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
+
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
   return (
     <>

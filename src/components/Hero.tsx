@@ -5,40 +5,28 @@ import { TypeAnimation } from 'react-type-animation';
 
 const Hero = () => {
   const handleResumeDownload = () => {
-    // Track download event if you have analytics
-    console.log('Resume download clicked');
-    
-    // The download attribute will handle the download
-    // The href will open the PDF in a new tab if download isn't supported
-    const link = document.createElement('a');
-    link.href = '/kamal-resume.pdf';
-    link.download = 'Kamal_Kiran_Polisetty_Resume.pdf';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open('/kamal-resume.pdf', '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-gray-900 dark:to-indigo-950">
       {/* Background elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950"></div>
-        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white dark:from-gray-900 to-transparent"></div>
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-300 dark:bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
-        <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-indigo-300 dark:bg-indigo-700 rounded-full opacity-20 blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-300/20 dark:bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-indigo-300/20 dark:bg-indigo-700/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            className="relative"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-4">
-              Hi, I'm <span className="text-blue-600 dark:text-blue-400">Kamal Kiran</span>
+            <span className="absolute -top-8 left-0 text-5xl opacity-20">👋</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+              Hi, I'm Kamal Kiran
             </h1>
           </motion.div>
 
@@ -46,7 +34,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl font-medium text-gray-700 dark:text-gray-300 mb-6"
+            className="text-2xl md:text-3xl font-medium text-gray-700 dark:text-gray-300 mb-8"
           >
             <TypeAnimation
               sequence={[
@@ -62,6 +50,7 @@ const Hero = () => {
               wrapper="span"
               speed={50}
               repeat={Infinity}
+              className="bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent"
             />
           </motion.div>
 
@@ -69,17 +58,17 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-gray-600 dark:text-gray-400 max-w-xl mb-8 md:mb-10 text-lg"
+            className="text-gray-600 dark:text-gray-400 max-w-2xl mb-12 text-lg md:text-xl leading-relaxed"
           >
-            I build exceptional digital experiences with modern technologies, 
-            turning complex problems into elegant solutions.
+            I craft exceptional digital experiences that merge innovative design with cutting-edge technology. 
+            Let's transform your ideas into impactful solutions.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center gap-4"
+            className="flex flex-col sm:flex-row items-center gap-6"
           >
             <Link
               to="contact"
@@ -87,17 +76,17 @@ const Hero = () => {
               smooth={true}
               offset={-70}
               duration={500}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md flex items-center gap-2 transition-colors w-full sm:w-auto text-center justify-center"
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-full flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              <Mail size={18} />
-              Contact Me
+              <Mail className="h-5 w-5" />
+              Let's Connect
             </Link>
             <button
               onClick={handleResumeDownload}
-              className="px-6 py-3 bg-white dark:bg-gray-800 border border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-md flex items-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 w-full sm:w-auto text-center justify-center"
+              className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-full flex items-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              <FileText size={18} />
-              Download Resume
+              <FileText className="h-5 w-5" />
+              View Resume
             </button>
           </motion.div>
         </div>
@@ -114,14 +103,17 @@ const Hero = () => {
             smooth={true}
             offset={-70}
             duration={500}
-            className="flex flex-col items-center cursor-pointer"
+            className="flex flex-col items-center cursor-pointer group"
           >
-            <span className="text-sm text-gray-500 dark:text-gray-400 mb-2">Scroll Down</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              Explore More
+            </span>
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
+              className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
             >
-              <ArrowDownCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <ArrowDownCircle className="w-6 h-6" />
             </motion.div>
           </Link>
         </motion.div>
