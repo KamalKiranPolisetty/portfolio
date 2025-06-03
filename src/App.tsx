@@ -15,32 +15,36 @@ import LoadingScreen from './components/LoadingScreen';
 
 function App() {
   const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
+  // Handle initial mount and theme setup
   useEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    setTheme(
-      savedTheme === 'dark' || (!savedTheme && prefersDark) ? 'dark' : 'light'
-    );
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    }
   }, []);
 
+  // Handle theme changes
   useEffect(() => {
-    if (mounted) {
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      localStorage.setItem('theme', theme);
+    if (!mounted) return;
+
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
+    
+    localStorage.setItem('theme', theme);
   }, [theme, mounted]);
 
+  // Handle loading state
   useEffect(() => {
-    // Simulate loading assets
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1500);
@@ -49,21 +53,22 @@ function App() {
   }, []);
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
+  // Don't render until mounted to prevent hydration issues
   if (!mounted) return null;
 
   return (
-    <>
+    <div className="min-h-screen bg-background text-foreground">
       <AnimatePresence mode="wait">
         {loading ? (
           <LoadingScreen key="loading" />
         ) : (
-          <motion.div 
-            key="content" 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
@@ -72,7 +77,7 @@ function App() {
               <Navbar />
               <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
               
-              <motion.main 
+              <motion.main
                 className="flex-1"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -96,7 +101,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
 
