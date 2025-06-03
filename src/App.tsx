@@ -14,18 +14,30 @@ import CursorFollower from './components/CursorFollower';
 import LoadingScreen from './components/LoadingScreen';
 
 function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      return savedTheme === 'dark' || 
-        (savedTheme === null && 
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-        ? 'dark' : 'light';
-    }
-    return 'light';
-  });
-  
+  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    setTheme(
+      savedTheme === 'dark' || (!savedTheme && prefersDark) ? 'dark' : 'light'
+    );
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('theme', theme);
+    }
+  }, [theme, mounted]);
 
   useEffect(() => {
     // Simulate loading assets
@@ -36,22 +48,11 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  if (typeof window === 'undefined') {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
     <>
