@@ -1,11 +1,16 @@
 import { motion } from 'framer-motion';
-import { ArrowDownCircle, Mail, FileText } from 'lucide-react';
+import { ArrowDownCircle, Mail, FileText } from '@lucide/react';
 import { Link } from 'react-scroll';
 import { TypeAnimation } from 'react-type-animation';
 
 const Hero = () => {
   const handleResumeDownload = () => {
-    window.open('/kamal-resume.pdf', '_blank', 'noopener,noreferrer');
+    const link = document.createElement('a');
+    link.href = '/kamal-resume.pdf';
+    link.download = 'Kamal_Kiran_Polisetty_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -83,10 +88,10 @@ const Hero = () => {
             </Link>
             <button
               onClick={handleResumeDownload}
-              className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-full flex items-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-full flex items-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 transform hover:scale-105 shadow-lg hover:shadow-xl group"
             >
-              <FileText className="h-5 w-5" />
-              View Resume
+              <FileText className="h-5 w-5 transition-transform group-hover:scale-110" />
+              Download Resume
             </button>
           </motion.div>
         </div>
