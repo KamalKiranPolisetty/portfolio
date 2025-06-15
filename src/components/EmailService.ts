@@ -9,7 +9,7 @@ import emailjs from 'emailjs-com';
 // Your actual EmailJS IDs
 const SERVICE_ID = 'service_uuget1x';
 const TEMPLATE_ID = 'template_dbdfrbg';
-const USER_ID = 'YOUR_EMAILJS_PUBLIC_KEY'; // Replace with your actual EmailJS Public Key from dashboard
+const USER_ID = 'ckep1zDjbUHQ2sb01'; // Replace with your actual EmailJS Public Key from dashboard
 
 /**
  * Initialize EmailJS with your user ID
