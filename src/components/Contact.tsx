@@ -30,7 +30,7 @@ const Contact = () => {
       // Your actual EmailJS service ID, template ID, and user ID
       const serviceID = 'service_uuget1x';
       const templateID = 'template_dbdfrbg';
-      const userID = 'YOUR_USER_ID'; // You'll need to provide your EmailJS user ID
+      const userID = 'kamalkiran898@gmail.com'; // You'll need to provide your EmailJS user ID
       
       // Prepare template parameters - match these with your EmailJS template variables
       const templateParams = {
