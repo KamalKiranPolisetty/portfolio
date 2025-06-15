@@ -1,7 +1,7 @@
 import { useState, FormEvent, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Send, Linkedin, Github, CheckCircle, AlertCircle } from 'lucide-react';
-import emailjs from 'emailjs-com';
+import { sendEmail, initEmailJS } from './EmailService';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -27,20 +27,11 @@ const Contact = () => {
     setError(null);
     
     try {
-      // Your actual EmailJS service ID and template ID
-      const serviceID = 'service_uuget1x';
-      const templateID = 'template_dbdfrbg';
+      // Initialize EmailJS if not already done
+      initEmailJS();
       
-      // Prepare template parameters - match these with your EmailJS template variables
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-        to_name: 'Kamal Kiran Polisetty'
-      };
-      
-      await emailjs.send(serviceID, templateID, templateParams);
+      // Use the centralized sendEmail function
+      await sendEmail(formData);
       
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: '', message: '' });

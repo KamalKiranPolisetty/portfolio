@@ -35,6 +35,7 @@ export const sendEmail = async (formData: {
     subject: formData.subject,
     message: formData.message,
     to_name: 'Kamal Kiran Polisetty', // Recipient name (you)
+    to_email: 'kamalkiranpolisetty@gmail.com', // Recipient email address
   };
 
   return emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
