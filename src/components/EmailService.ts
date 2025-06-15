@@ -9,7 +9,7 @@ import emailjs from 'emailjs-com';
 // Your actual EmailJS IDs
 const SERVICE_ID = 'service_uuget1x';
 const TEMPLATE_ID = 'template_dbdfrbg';
-const USER_ID = 'YOUR_USER_ID'; // You need to provide your EmailJS user ID
+const USER_ID = 'kamalkiran898@gmail.com'; // You need to provide your EmailJS user ID
 
 /**
  * Initialize EmailJS with your user ID
