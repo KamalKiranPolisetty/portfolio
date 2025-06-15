@@ -56,6 +56,24 @@
     @apply px-4 md:px-6 mx-auto max-w-7xl;
   }
 
+  /* Cursor styles for non-interactive elements */
+  .select-none {
+    user-select: none;
+    cursor: default;
+  }
+
+  .pointer-events-none {
+    pointer-events: none;
+  }
+
+  .cursor-default {
+    cursor: default;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
   /* Skill badges */
   .skill-badge {
     @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 
@@ -63,7 +81,7 @@
            dark:from-blue-900/30 dark:to-blue-800/30 dark:text-blue-300
            hover:from-blue-200 hover:to-blue-100 
            dark:hover:from-blue-800/40 dark:hover:to-blue-700/40
-           transform hover:scale-105 hover:shadow-md;
+           transform hover:scale-105 hover:shadow-md cursor-default select-none;
   }
 
   /* Custom scrollbar */
@@ -85,7 +103,7 @@
 
   /* Project card hover effect */
   .project-card {
-    @apply transition-all duration-500 hover:transform hover:scale-[1.02] hover:shadow-xl;
+    @apply transition-all duration-500 hover:transform hover:scale-[1.02] hover:shadow-xl cursor-pointer;
   }
 
   /* Timeline styles */
@@ -111,7 +129,7 @@
     @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 
            hover:from-blue-700 hover:to-indigo-700 text-white font-medium 
            rounded-full transition-all transform hover:scale-105 
-           shadow-lg hover:shadow-xl;
+           shadow-lg hover:shadow-xl cursor-pointer;
   }
 
   .btn-secondary {
@@ -119,6 +137,12 @@
            border-blue-600 dark:border-blue-500 text-blue-600 
            dark:text-blue-400 font-medium rounded-full transition-all 
            hover:bg-blue-50 dark:hover:bg-gray-700 transform 
-           hover:scale-105 shadow-lg hover:shadow-xl;
+           hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer;
+  }
+
+  /* Fix for browser caching issues */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

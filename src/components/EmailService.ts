@@ -6,10 +6,10 @@ import emailjs from 'emailjs-com';
  * Then update the service, template, and user ID values below
  */
 
-// Replace these with your actual EmailJS IDs
-const SERVICE_ID = 'YOUR_SERVICE_ID';
-const TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-const USER_ID = 'YOUR_USER_ID';
+// Your actual EmailJS IDs
+const SERVICE_ID = 'service_uuget1x';
+const TEMPLATE_ID = 'template_dbdfrbg';
+const USER_ID = 'YOUR_USER_ID'; // You need to provide your EmailJS user ID
 
 /**
  * Initialize EmailJS with your user ID
