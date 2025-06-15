@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowDownCircle, Mail, FileText } from '@lucide/react';
+import { ArrowDownCircle, Mail, FileText } from 'lucide-react';
 import { Link } from 'react-scroll';
 import { TypeAnimation } from 'react-type-animation';
 
