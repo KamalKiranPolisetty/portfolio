@@ -27,10 +27,9 @@ const Contact = () => {
     setError(null);
     
     try {
-      // Your actual EmailJS service ID, template ID, and user ID
+      // Your actual EmailJS service ID and template ID
       const serviceID = 'service_uuget1x';
       const templateID = 'template_dbdfrbg';
-      const userID = 'kamalkiran898@gmail.com'; // You'll need to provide your EmailJS user ID
       
       // Prepare template parameters - match these with your EmailJS template variables
       const templateParams = {
@@ -41,7 +40,7 @@ const Contact = () => {
         to_name: 'Kamal Kiran Polisetty'
       };
       
-      await emailjs.send(serviceID, templateID, templateParams, userID);
+      await emailjs.send(serviceID, templateID, templateParams);
       
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: '', message: '' });
