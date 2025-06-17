@@ -1,27 +1,48 @@
 import { motion } from 'framer-motion';
-import { ArrowDownCircle, Mail, FileText, X, Download, Eye } from 'lucide-react';
+import { ArrowDownCircle, Mail, FileText, X, Download, Eye, ExternalLink, AlertCircle } from 'lucide-react';
 import { Link } from 'react-scroll';
 import { TypeAnimation } from 'react-type-animation';
 import { useState } from 'react';
 
 const Hero = () => {
   const [showPdfPopup, setShowPdfPopup] = useState(false);
+  const [pdfError, setPdfError] = useState(false);
 
   const handleResumeView = () => {
     setShowPdfPopup(true);
+    setPdfError(false);
   };
 
   const handleResumeDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/kamal-resume.pdf';
-    link.download = 'Kamal_Kiran_Polisetty_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // First try to download, if it fails, show an alert
+    try {
+      const link = document.createElement('a');
+      link.href = '/kamal-resume.pdf';
+      link.download = 'Kamal_Kiran_Polisetty_Resume.pdf';
+      link.setAttribute('target', '_blank');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      alert('Resume download not available. Please contact me directly for my latest resume.');
+    }
+  };
+
+  const handlePdfError = () => {
+    setPdfError(true);
   };
 
   const closePdfPopup = () => {
     setShowPdfPopup(false);
+    setPdfError(false);
+  };
+
+  const openPdfInNewTab = () => {
+    try {
+      window.open('/kamal-resume.pdf', '_blank');
+    } catch (error) {
+      alert('Unable to open PDF. Please contact me directly for my latest resume.');
+    }
   };
 
   return (
@@ -93,18 +114,27 @@ const Hero = () => {
                 smooth={true}
                 offset={-70}
                 duration={500}
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-full flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-full flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer"
               >
                 <Mail className="h-5 w-5" />
                 Let's Connect
               </Link>
-              <button
-                onClick={handleResumeView}
-                className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-full flex items-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 transform hover:scale-105 shadow-lg hover:shadow-xl group"
-              >
-                <Eye className="h-5 w-5 transition-transform group-hover:scale-110" />
-                View Resume
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleResumeView}
+                  className="px-6 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-full flex items-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+                >
+                  <Eye className="h-5 w-5 transition-transform group-hover:scale-110" />
+                  View Resume
+                </button>
+                <button
+                  onClick={handleResumeDownload}
+                  className="px-6 py-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-full flex items-center gap-2 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl group"
+                >
+                  <Download className="h-5 w-5 transition-transform group-hover:scale-110" />
+                  Download
+                </button>
+              </div>
             </motion.div>
           </div>
 
@@ -172,6 +202,14 @@ const Hero = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
+                  onClick={openPdfInNewTab}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors font-medium"
+                  title="Open in New Tab"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Open in Tab
+                </button>
+                <button
                   onClick={handleResumeDownload}
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
                   title="Download Resume"
@@ -192,44 +230,58 @@ const Hero = () => {
             {/* PDF Viewer */}
             <div className="flex-1 p-6">
               <div className="w-full h-full bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
-                <iframe
-                  src="/kamal-resume.pdf#toolbar=1&navpanes=0&scrollbar=1"
-                  className="w-full h-full border-0"
-                  title="Kamal Kiran Polisetty Resume"
-                  onError={(e) => {
-                    console.error('PDF loading error:', e);
-                    // Fallback content
-                    e.target.style.display = 'none';
-                    const fallback = document.createElement('div');
-                    fallback.innerHTML = `
-                      <div class="flex flex-col items-center justify-center h-full text-center p-8">
-                        <div class="mb-4 p-4 bg-red-100 dark:bg-red-900/30 rounded-full">
-                          <FileText class="h-12 w-12 text-red-600 dark:text-red-400" />
-                        </div>
-                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                          Unable to display PDF
-                        </h4>
-                        <p class="text-gray-600 dark:text-gray-400 mb-4">
-                          The PDF couldn't be loaded. Please download it to view.
-                        </p>
-                        <button 
-                          onclick="handleResumeDownload()" 
-                          class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-                        >
-                          Download Resume
-                        </button>
-                      </div>
-                    `;
-                    e.target.parentNode.appendChild(fallback);
-                  }}
-                />
+                {!pdfError ? (
+                  <iframe
+                    src="/kamal-resume.pdf#toolbar=1&navpanes=0&scrollbar=1&view=FitH"
+                    className="w-full h-full border-0"
+                    title="Kamal Kiran Polisetty Resume"
+                    onLoad={() => setPdfError(false)}
+                    onError={handlePdfError}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                    <div className="mb-6 p-4 bg-orange-100 dark:bg-orange-900/30 rounded-full">
+                      <AlertCircle className="h-16 w-16 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <h4 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                      PDF Preview Unavailable
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md leading-relaxed">
+                      The PDF couldn't be displayed in the browser. This might be due to browser security settings or the file location.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button 
+                        onClick={handleResumeDownload}
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                      >
+                        <Download className="h-5 w-5" />
+                        Download Resume
+                      </button>
+                      <button 
+                        onClick={openPdfInNewTab}
+                        className="px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors flex items-center gap-2"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        Open in New Tab
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+                      You can also contact me directly for my latest resume
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Footer */}
             <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
               <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                <p>Click and drag to scroll • Use browser zoom for better readability</p>
+                <p>
+                  {!pdfError 
+                    ? "Click and drag to scroll • Use browser zoom for better readability" 
+                    : "Having trouble viewing? Try downloading or opening in a new tab"
+                  }
+                </p>
                 <p>Last updated: {new Date().toLocaleDateString()}</p>
               </div>
             </div>
