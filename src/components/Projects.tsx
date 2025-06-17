@@ -3,9 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Github, ExternalLink, FileCode, ArrowRight } from 'lucide-react';
 import LazyImage from './LazyImage';
 
-// Lazy load the project modal if needed in the future
-// const ProjectModal = lazy(() => import('./ProjectModal'));
-
 interface Project {
   id: number;
   title: string;
@@ -92,22 +89,22 @@ const Projects = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-12"
+          className="mb-8 md:mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center">
             My <span className="text-blue-600 dark:text-blue-400">Projects</span>
           </h2>
-          <div className="w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mb-8"></div>
-          <p className="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-8">
+          <div className="w-16 md:w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mb-6 md:mb-8"></div>
+          <p className="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-6 md:mb-8 text-sm md:text-base px-4">
             Here are some of my recent projects that demonstrate my technical skills and problem-solving abilities.
           </p>
 
-          <div className="flex justify-center gap-4 mb-8">
+          <div className="flex justify-center gap-3 md:gap-4 mb-6 md:mb-8">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-md transition-all ${
+              className={`px-4 md:px-6 py-2 md:py-3 rounded-lg transition-all text-sm md:text-base font-medium ${
                 filter === 'all'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-white shadow-lg'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
@@ -115,9 +112,9 @@ const Projects = () => {
             </button>
             <button
               onClick={() => setFilter('featured')}
-              className={`px-4 py-2 rounded-md transition-all ${
+              className={`px-4 md:px-6 py-2 md:py-3 rounded-lg transition-all text-sm md:text-base font-medium ${
                 filter === 'featured'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-white shadow-lg'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
@@ -126,7 +123,7 @@ const Projects = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
           <AnimatePresence mode="wait">
             {filteredProjects.map((project) => (
               <motion.div
@@ -135,21 +132,21 @@ const Projects = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="project-card relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-900 h-[400px]"
+                className="project-card relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-900 h-auto md:h-[420px] flex flex-col"
               >
-                <div className="h-48 overflow-hidden">
+                <div className="h-48 md:h-52 overflow-hidden flex-shrink-0">
                   <LazyImage
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full"
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="p-5">
-                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                <div className="p-4 md:p-5 flex-1 flex flex-col">
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 line-clamp-2">{project.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base mb-4 line-clamp-3 flex-1">
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4">
                     {project.technologies.slice(0, 3).map((tech, index) => (
                       <span 
                         key={index} 
@@ -164,17 +161,17 @@ const Projects = () => {
                       </span>
                     )}
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mt-auto">
                     <div className="flex space-x-3">
                       {project.githubLink && (
                         <a
                           href={project.githubLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+                          className="p-2 text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all"
                           aria-label="GitHub Repository"
                         >
-                          <Github size={20} />
+                          <Github size={18} />
                         </a>
                       )}
                       {project.liveLink && (
@@ -182,16 +179,16 @@ const Projects = () => {
                           href={project.liveLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+                          className="p-2 text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all"
                           aria-label="Live Demo"
                         >
-                          <ExternalLink size={20} />
+                          <ExternalLink size={18} />
                         </a>
                       )}
                     </div>
-                    <button className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 font-medium text-sm">
+                    <button className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 font-medium text-sm transition-colors">
                       <span className="mr-1">View Details</span>
-                      <ArrowRight size={16} />
+                      <ArrowRight size={14} />
                     </button>
                   </div>
                 </div>
@@ -200,16 +197,16 @@ const Projects = () => {
           </AnimatePresence>
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 md:mt-12">
           <a
             href="https://github.com/kamalkiranpolisetty"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
+            className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-sm md:text-base transition-colors"
           >
-            <FileCode className="mr-2 h-5 w-5" />
+            <FileCode className="mr-2 h-4 w-4 md:h-5 md:w-5" />
             View more projects on GitHub
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
           </a>
         </div>
       </div>
