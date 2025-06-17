@@ -9,7 +9,7 @@ import emailjs from 'emailjs-com';
 // Your actual EmailJS IDs
 const SERVICE_ID = 'service_uuget1x';
 const TEMPLATE_ID_AUTO_REPLY = 'template_dbdfrbg'; // Template for auto-reply to user
-const TEMPLATE_ID_NOTIFY_ME = 'template_notify_me'; // Template for notification to you (create this)
+const TEMPLATE_ID_NOTIFY_ME = 'template_5mg3gzw'; // Template for notification to you (create this)
 const USER_ID = 'ckep1zDjbUHQ2sb01'; // Replace with your actual EmailJS Public Key from dashboard
 
 /**
