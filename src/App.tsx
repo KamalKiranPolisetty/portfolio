@@ -1,17 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import About from './components/About';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Skills from './components/Skills';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import LoadingScreen from './components/LoadingScreen';
 import ScrollToTop from './components/ScrollToTop';
 import ThemeToggle from './components/ThemeToggle';
 import CursorFollower from './components/CursorFollower';
-import LoadingScreen from './components/LoadingScreen';
+
+// Lazy load components that are not immediately visible
+const About = lazy(() => import('./components/About'));
+const Experience = lazy(() => import('./components/Experience'));
+const Projects = lazy(() => import('./components/Projects'));
+const Skills = lazy(() => import('./components/Skills'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
+
+// Loading component for lazy-loaded sections
+const SectionLoader = () => (
+  <div className="flex items-center justify-center py-20">
+    <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 function App() {
   const [mounted, setMounted] = useState(false);
@@ -43,11 +52,11 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme, mounted]);
 
-  // Handle loading state
+  // Handle loading state - reduced time for faster perceived load
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 800); // Reduced from 1500ms to 800ms
     
     return () => clearTimeout(timer);
   }, []);
@@ -86,16 +95,28 @@ function App() {
                 <AnimatePresence mode="wait">
                   <div key={theme}>
                     <Hero />
-                    <About />
-                    <Experience />
-                    <Skills />
-                    <Projects />
-                    <Contact />
+                    <Suspense fallback={<SectionLoader />}>
+                      <About />
+                    </Suspense>
+                    <Suspense fallback={<SectionLoader />}>
+                      <Experience />
+                    </Suspense>
+                    <Suspense fallback={<SectionLoader />}>
+                      <Skills />
+                    </Suspense>
+                    <Suspense fallback={<SectionLoader />}>
+                      <Projects />
+                    </Suspense>
+                    <Suspense fallback={<SectionLoader />}>
+                      <Contact />
+                    </Suspense>
                   </div>
                 </AnimatePresence>
               </motion.main>
               
-              <Footer />
+              <Suspense fallback={<div className="h-20 bg-gray-900"></div>}>
+                <Footer />
+              </Suspense>
             </div>
             <ScrollToTop />
           </motion.div>

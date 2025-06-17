@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, ExternalLink, FileCode, ArrowRight } from 'lucide-react';
+import LazyImage from './LazyImage';
+
+// Lazy load the project modal if needed in the future
+// const ProjectModal = lazy(() => import('./ProjectModal'));
 
 interface Project {
   id: number;
@@ -21,7 +25,7 @@ const Projects = () => {
       id: 1,
       title: "Financial Dashboard",
       description: "A comprehensive financial dashboard for tracking investments, expenses, and generating reports with data visualization.",
-      image: "https://images.pexels.com/photos/7567449/pexels-photo-7567449.jpeg",
+      image: "https://images.pexels.com/photos/7567449/pexels-photo-7567449.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       technologies: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "D3.js"],
       githubLink: "https://github.com/kamalkiranpolisetty/financial-dashboard",
       liveLink: "https://financial-dashboard-demo.com",
@@ -31,7 +35,7 @@ const Projects = () => {
       id: 2,
       title: "E-Commerce Platform",
       description: "A full-featured e-commerce platform with product management, shopping cart, user authentication, and payment processing.",
-      image: "https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg",
+      image: "https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       technologies: ["React", "Redux", "Node.js", "Express", "MongoDB", "Stripe API"],
       githubLink: "https://github.com/kamalkiranpolisetty/ecommerce-platform",
       featured: true
@@ -40,7 +44,7 @@ const Projects = () => {
       id: 3,
       title: "Healthcare Management System",
       description: "A comprehensive system for managing patient records, appointments, and medical histories for healthcare providers.",
-      image: "https://images.pexels.com/photos/3846024/pexels-photo-3846024.jpeg",
+      image: "https://images.pexels.com/photos/3846024/pexels-photo-3846024.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       technologies: ["Angular", "TypeScript", "Java", "Spring Boot", "PostgreSQL"],
       liveLink: "https://healthcare-system-demo.com",
       featured: true
@@ -49,7 +53,7 @@ const Projects = () => {
       id: 4,
       title: "Task Management App",
       description: "A collaborative task management application with real-time updates, team collaboration, and progress tracking.",
-      image: "https://images.pexels.com/photos/3243090/pexels-photo-3243090.jpeg",
+      image: "https://images.pexels.com/photos/3243090/pexels-photo-3243090.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       technologies: ["React", "Redux", "Firebase", "Material UI"],
       githubLink: "https://github.com/kamalkiranpolisetty/task-manager",
       liveLink: "https://task-manager-demo.com",
@@ -59,7 +63,7 @@ const Projects = () => {
       id: 5,
       title: "Weather Forecast Application",
       description: "A weather forecast application providing real-time weather data and forecasts for locations worldwide.",
-      image: "https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg",
+      image: "https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       technologies: ["React", "Node.js", "Express", "OpenWeather API", "Chart.js"],
       githubLink: "https://github.com/kamalkiranpolisetty/weather-app",
       featured: false
@@ -68,7 +72,7 @@ const Projects = () => {
       id: 6,
       title: "Social Media Analytics Tool",
       description: "An analytics platform for tracking social media performance across multiple platforms with customizable reports.",
-      image: "https://images.pexels.com/photos/7163665/pexels-photo-7163665.jpeg",
+      image: "https://images.pexels.com/photos/7163665/pexels-photo-7163665.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       technologies: ["Vue.js", "Python", "Flask", "PostgreSQL", "Redis", "Twitter API", "Facebook Graph API"],
       githubLink: "https://github.com/kamalkiranpolisetty/social-analytics",
       liveLink: "https://social-analytics-demo.com",
@@ -133,11 +137,13 @@ const Projects = () => {
                 transition={{ duration: 0.3 }}
                 className="project-card relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-gray-900 h-[400px]"
               >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-48 object-cover"
-                />
+                <div className="h-48 overflow-hidden">
+                  <LazyImage
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full"
+                  />
+                </div>
                 <div className="p-5">
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">

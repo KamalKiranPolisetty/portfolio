@@ -8,9 +8,53 @@
     <meta name="keywords" content="Kamal Kiran Polisetty, full stack, developer, portfolio, React, Node.js">
     <meta name="author" content="Kamal Kiran Polisetty">
     <title>Kamal Kiran Polisetty | Full Stack Developer</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.pexels.com">
+    
+    <!-- Optimized font loading -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical resources -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    
+    <!-- Performance hints -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="color-scheme" content="light dark">
+    
+    <!-- Critical CSS inline (if needed) -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { 
+        margin: 0; 
+        font-family: 'Inter', sans-serif; 
+        background-color: #fafafa;
+        color: #111827;
+      }
+      .dark body { 
+        background-color: #111827; 
+        color: #f9fafb; 
+      }
+      /* Loading state */
+      #root:empty::after {
+        content: '';
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 32px;
+        height: 32px;
+        margin: -16px 0 0 -16px;
+        border: 2px solid #3b82f6;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
     <div id="root"></div>

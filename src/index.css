@@ -84,9 +84,9 @@
            transform hover:scale-105 hover:shadow-md cursor-default select-none;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - optimized */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -101,9 +101,10 @@
     @apply from-blue-600 to-indigo-700 dark:from-blue-500 dark:to-indigo-600;
   }
 
-  /* Project card hover effect */
+  /* Project card hover effect - optimized */
   .project-card {
-    @apply transition-all duration-500 hover:transform hover:scale-[1.02] hover:shadow-xl cursor-pointer;
+    @apply transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl cursor-pointer;
+    will-change: transform;
   }
 
   /* Timeline styles */
@@ -140,9 +141,34 @@
            hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer;
   }
 
-  /* Fix for browser caching issues */
+  /* Performance optimizations */
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Text clamp utility */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Optimize image rendering */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 }
