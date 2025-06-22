@@ -1,13 +1,20 @@
 {
   "name": "kamal-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "analyze": "npx vite-bundle-analyzer",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "clean": "rm -rf dist node_modules/.vite",
+    "prepare": "npm run type-check && npm run lint"
   },
   "dependencies": {
     "emailjs-com": "^3.2.0",
@@ -32,6 +39,17 @@
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
-  }
+    "vite": "^5.0.12",
+    "vite-bundle-analyzer": "^0.7.0",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

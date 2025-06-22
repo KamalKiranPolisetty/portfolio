@@ -2,33 +2,45 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { Menu, X, Code, Github, Linkedin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NAVIGATION_ITEMS, APP_CONFIG } from '../config/constants';
+import { useScrollPosition } from '../hooks/useScrollPosition';
+import { trackSocialClick } from '../utils/analytics';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const { scrollPosition } = useScrollPosition();
+  const scrolled = scrollPosition > 20;
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  
-  const menuItems = [
-    { name: 'About', to: 'about' },
-    { name: 'Experience', to: 'experience' },
-    { name: 'Skills', to: 'skills' },
-    { name: 'Projects', to: 'projects' },
-    { name: 'Contact', to: 'contact' }
-  ];
 
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (isMenuOpen && !target.closest('.mobile-menu') && !target.closest('.menu-button')) {
+        setIsMenuOpen(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMenuOpen]);
+
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMenuOpen]);
+
+  const handleSocialClick = (platform: string) => {
+    trackSocialClick(platform);
+  };
 
   const navbarClasses = `fixed w-full z-30 transition-all duration-300 ${
     scrolled 
@@ -37,7 +49,7 @@ const Navbar = () => {
   }`;
 
   return (
-    <nav className={navbarClasses}>
+    <nav className={navbarClasses} role="navigation" aria-label="Main navigation">
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
         {/* Logo */}
         <Link
@@ -46,7 +58,8 @@ const Navbar = () => {
           smooth={true}
           offset={-70}
           duration={500}
-          className="flex items-center space-x-2 cursor-pointer group"
+          className="flex items-center space-x-2 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-1"
+          aria-label="Go to top of page"
         >
           <motion.div
             whileHover={{ rotate: 360 }}
@@ -61,7 +74,7 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-8">
-          {menuItems.map((item) => (
+          {NAVIGATION_ITEMS.map((item) => (
             <Link
               key={item.name}
               to={item.to}
@@ -69,29 +82,32 @@ const Navbar = () => {
               smooth={true}
               offset={-70}
               duration={500}
-              className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium cursor-pointer py-2 group"
+              className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium cursor-pointer py-2 group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+              activeClass="text-blue-600 dark:text-blue-400"
             >
               {item.name}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 scale-x-0 group-hover:scale-x-100 origin-left"></span>
             </Link>
           ))}
           
           <div className="flex items-center space-x-3 ml-6 pl-6 border-l border-gray-300 dark:border-gray-600">
             <a 
-              href="https://github.com/kamalkiranpolisetty" 
+              href={APP_CONFIG.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
-              aria-label="GitHub"
+              onClick={() => handleSocialClick('GitHub')}
+              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Visit GitHub profile"
             >
               <Github className="h-5 w-5" />
             </a>
             <a 
-              href="https://www.linkedin.com/in/kamalkiranpolisetty" 
+              href={APP_CONFIG.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
-              aria-label="LinkedIn"
+              onClick={() => handleSocialClick('LinkedIn')}
+              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Visit LinkedIn profile"
             >
               <Linkedin className="h-5 w-5" />
             </a>
@@ -101,8 +117,9 @@ const Navbar = () => {
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMenu}
-          className="lg:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all focus:outline-none"
+          className="menu-button lg:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMenuOpen}
         >
           <motion.div
             animate={{ rotate: isMenuOpen ? 180 : 0 }}
@@ -121,11 +138,11 @@ const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200/20 dark:border-gray-700/20"
+            className="mobile-menu lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200/20 dark:border-gray-700/20"
           >
             <div className="container mx-auto px-4 py-6">
               <div className="flex flex-col space-y-4">
-                {menuItems.map((item, index) => (
+                {NAVIGATION_ITEMS.map((item, index) => (
                   <motion.div
                     key={item.name}
                     initial={{ opacity: 0, x: -20 }}
@@ -139,7 +156,8 @@ const Navbar = () => {
                       offset={-70}
                       duration={500}
                       onClick={() => setIsMenuOpen(false)}
-                      className="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all font-medium cursor-pointer"
+                      className="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      activeClass="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
                     >
                       {item.name}
                     </Link>
@@ -153,20 +171,22 @@ const Navbar = () => {
                   className="flex items-center justify-center space-x-4 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700"
                 >
                   <a 
-                    href="https://github.com/kamalkiranpolisetty" 
+                    href={APP_CONFIG.social.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
-                    aria-label="GitHub"
+                    onClick={() => handleSocialClick('GitHub')}
+                    className="p-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    aria-label="Visit GitHub profile"
                   >
                     <Github className="h-5 w-5" />
                   </a>
                   <a 
-                    href="https://www.linkedin.com/in/kamalkiranpolisetty" 
+                    href={APP_CONFIG.social.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
-                    aria-label="LinkedIn"
+                    onClick={() => handleSocialClick('LinkedIn')}
+                    className="p-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    aria-label="Visit LinkedIn profile"
                   >
                     <Linkedin className="h-5 w-5" />
                   </a>
