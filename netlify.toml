@@ -1,6 +1,6 @@
 [build]
   publish = "dist"
-  command = "npm run build"
+  command = "npm install -D typescript-eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
