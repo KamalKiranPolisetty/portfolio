@@ -20,26 +20,34 @@ const Hero = ({ theme }) => {
   const [pdfError, setPdfError] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  // ✅ Detect only large desktops
+  // ✅ Correct desktop detection (no touch, fine pointer)
   useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth > 1280);
-    checkDesktop();
-    window.addEventListener("resize", checkDesktop);
-    return () => window.removeEventListener("resize", checkDesktop);
+    const detectDesktop = () => {
+      const desktop =
+        window.matchMedia("(hover: hover)").matches &&
+        window.matchMedia("(pointer: fine)").matches;
+
+      setIsDesktop(desktop);
+    };
+
+    detectDesktop();
+    window.addEventListener("resize", detectDesktop);
+    return () => window.removeEventListener("resize", detectDesktop);
   }, []);
 
+  // VIEW Resume (Popup for desktop, redirect for others)
   const handleResumeView = () => {
     if (isDesktop) {
       setShowPdfPopup(true);
       setPdfError(false);
       trackResumeView();
     } else {
-      // ✅ Redirect for mobile & tablet
       window.open(APP_CONFIG.resume.path, "_blank");
       trackResumeView();
     }
   };
 
+  // DOWNLOAD Resume
   const handleResumeDownload = () => {
     try {
       const link = document.createElement("a");
@@ -68,7 +76,7 @@ const Hero = ({ theme }) => {
         id="hero"
         className="relative min-h-screen flex items-center overflow-hidden"
       >
-        {/* Animated dots pattern */}
+        {/* Background dots */}
         <div className="absolute inset-0 -z-5">
           {[...Array(50)].map((_, i) => (
             <motion.div
@@ -94,7 +102,7 @@ const Hero = ({ theme }) => {
         {/* Layout */}
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-center">
-            {/* TEXT */}
+            {/* TEXT LEFT SIDE */}
             <div className="max-w-2xl mx-auto text-left order-1 xl:order-1 pl-4 md:pl-8 xl:pl-12">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -105,20 +113,21 @@ const Hero = ({ theme }) => {
                 <h2 className="text-2xl md:text-3xl text-blue-600 dark:text-blue-300 font-medium">
                   Hello,
                 </h2>
+
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold flex items-center gap-4 leading-tight">
                   <span className="text-black dark:text-white">
                     {APP_CONFIG.name.split(" ")[0]}
                   </span>
-                  <span
-                    className="bg-clip-text text-transparent bg-gradient-to-r 
-                    from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400"
-                  >
+
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
                     here!
                   </span>
+
                   <span className="inline-block">👋</span>
                 </h1>
               </motion.div>
 
+              {/* Description */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -126,12 +135,11 @@ const Hero = ({ theme }) => {
                 className="space-y-5 mb-8"
               >
                 <p className="text-lg md:text-xl font-medium text-gray-900 dark:text-gray-200 leading-relaxed tracking-tight">
-                  Full Stack Developer crafting
+                  Full Stack Developer crafting{" "}
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
-                    {" "}
-                    scalable applications{" "}
-                  </span>
-                  & intelligent{" "}
+                    scalable applications
+                  </span>{" "}
+                  &{" "}
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     AI-powered solutions
                   </span>
@@ -139,7 +147,7 @@ const Hero = ({ theme }) => {
                 </p>
               </motion.div>
 
-              {/* SOCIALS */}
+              {/* SOCIAL ICONS */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -150,37 +158,53 @@ const Hero = ({ theme }) => {
                   <a
                     href={APP_CONFIG.social.github}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full 
+                 bg-blue-900/10 dark:bg-blue-900/20 
+                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                 flex items-center justify-center 
+                 transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Github className="w-5 h-5 text-blue-400" />
                   </a>
+
                   <a
                     href={APP_CONFIG.social.linkedin}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full 
+                 bg-blue-900/10 dark:bg-blue-900/20 
+                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                 flex items-center justify-center 
+                 transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Linkedin className="w-5 h-5 text-blue-400" />
                   </a>
+
                   <a
                     href={APP_CONFIG.social.instagram}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full 
+                 bg-blue-900/10 dark:bg-blue-900/20 
+                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                 flex items-center justify-center 
+                 transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Instagram className="w-5 h-5 text-blue-400" />
                   </a>
+
                   <a
                     href={`mailto:${APP_CONFIG.email}`}
-                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full 
+                 bg-blue-900/10 dark:bg-blue-900/20 
+                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                 flex items-center justify-center 
+                 transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Mail className="w-5 h-5 text-blue-400" />
                   </a>
                 </div>
               </motion.div>
 
-              {/* CTA */}
+              {/* BUTTONS */}
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -189,17 +213,16 @@ const Hero = ({ theme }) => {
               >
                 <button
                   onClick={handleResumeView}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-md transition-all shadow"
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-md shadow transition-all"
                 >
                   Resume
                 </button>
 
                 <Link
                   to="contact"
-                  spy={true}
                   smooth={true}
-                  offset={-70}
                   duration={500}
+                  offset={-70}
                   className="px-6 py-2 border-2 border-blue-500 text-blue-400 rounded-md hover:bg-blue-500 hover:text-white transition-all cursor-pointer flex items-center gap-2"
                 >
                   <Mail className="w-4 h-4" />
@@ -232,22 +255,18 @@ const Hero = ({ theme }) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 md:p-6"
           onClick={closePdfPopup}
-          role="dialog"
-          aria-modal="true"
         >
           <motion.div
             initial={{ scale: 0.85, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.85, opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="relative bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
+            {/* HEADER */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -257,15 +276,16 @@ const Hero = ({ theme }) => {
                   {APP_CONFIG.name} - Resume
                 </h3>
               </div>
+
               <button
                 onClick={closePdfPopup}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
               >
                 <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
               </button>
             </div>
 
-            {/* PDF Viewer */}
+            {/* PDF VIEWER */}
             <div className="flex-1 p-4">
               {!pdfError ? (
                 <iframe
@@ -275,7 +295,7 @@ const Hero = ({ theme }) => {
                   onError={handlePdfError}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center">
+                <div className="flex flex-col items-center justify-center h-full">
                   <AlertCircle className="h-14 w-14 text-orange-500 mb-4" />
                   <p className="text-gray-300">PDF preview unavailable.</p>
                 </div>
