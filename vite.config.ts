@@ -6,6 +6,9 @@ import { resolve } from 'path';
 export default defineConfig({
   plugins: [react()],
   
+  // Base path for deployment
+  base: '/',
+  
   // Path resolution
   resolve: {
     alias: {
@@ -35,11 +38,14 @@ export default defineConfig({
 
   // Build configuration
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    
     // Target modern browsers for better performance
     target: 'es2020',
     
     // Generate source maps for debugging (disable in production)
-    sourcemap: process.env.NODE_ENV === 'development',
+    sourcemap: false,
     
     // Optimize chunk size warnings
     chunkSizeWarningLimit: 1000,
@@ -56,25 +62,10 @@ export default defineConfig({
           'email-vendor': ['emailjs-com'],
         },
         
-        // Optimize asset naming for better caching
-        assetFileNames: (assetInfo) => {
-          const info = assetInfo.name?.split('.') || [];
-          const ext = info[info.length - 1];
-          
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext || '')) {
-            return 'assets/images/[name]-[hash][extname]';
-          }
-          if (/css/i.test(ext || '')) {
-            return 'assets/css/[name]-[hash][extname]';
-          }
-          if (/woff2?|eot|ttf|otf/i.test(ext || '')) {
-            return 'assets/fonts/[name]-[hash][extname]';
-          }
-          return 'assets/[name]-[hash][extname]';
-        },
-        
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        // Simplified asset naming
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
       },
     },
 
@@ -107,15 +98,6 @@ export default defineConfig({
     host: true,
     open: true,
     cors: true,
-    
-    // Proxy configuration (if needed for API calls)
-    proxy: {
-      // '/api': {
-      //   target: 'http://localhost:3001',
-      //   changeOrigin: true,
-      //   rewrite: (path) => path.replace(/^\/api/, ''),
-      // },
-    },
   },
 
   // Preview server configuration
@@ -128,22 +110,11 @@ export default defineConfig({
   // CSS configuration
   css: {
     devSourcemap: process.env.NODE_ENV === 'development',
-    postcss: './postcss.config.js',
   },
 
   // Environment variables
   define: {
-    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
     __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
-  },
-
-  // Experimental features
-  experimental: {
-    renderBuiltUrl(filename, { hostType }) {
-      if (hostType === 'js') {
-        return { js: `/${filename}` };
-      }
-      return { relative: true };
-    },
   },
 });
