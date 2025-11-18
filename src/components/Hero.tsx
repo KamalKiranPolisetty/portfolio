@@ -11,18 +11,33 @@ import {
   Instagram,
 } from "lucide-react";
 import { Link } from "react-scroll";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { APP_CONFIG } from "../config/constants";
 import { trackResumeDownload, trackResumeView } from "../utils/analytics";
 
 const Hero = ({ theme }) => {
   const [showPdfPopup, setShowPdfPopup] = useState(false);
   const [pdfError, setPdfError] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // ✅ Detect only large desktops
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth > 1280);
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
 
   const handleResumeView = () => {
-    setShowPdfPopup(true);
-    setPdfError(false);
-    trackResumeView();
+    if (isDesktop) {
+      setShowPdfPopup(true);
+      setPdfError(false);
+      trackResumeView();
+    } else {
+      // ✅ Redirect for mobile & tablet
+      window.open(APP_CONFIG.resume.path, "_blank");
+      trackResumeView();
+    }
   };
 
   const handleResumeDownload = () => {
@@ -35,25 +50,17 @@ const Hero = ({ theme }) => {
       link.click();
       document.body.removeChild(link);
       trackResumeDownload();
-    } catch (error) {
+    } catch {
       alert("Resume download not available. Please contact me directly.");
     }
   };
 
   const handlePdfError = () => setPdfError(true);
-
   const closePdfPopup = () => {
     setShowPdfPopup(false);
     setPdfError(false);
   };
-
-  const openPdfInNewTab = () => {
-    try {
-      window.open(APP_CONFIG.resume.path, "_blank");
-    } catch (error) {
-      alert("Unable to open PDF.");
-    }
-  };
+  const openPdfInNewTab = () => window.open(APP_CONFIG.resume.path, "_blank");
 
   return (
     <>
@@ -84,20 +91,11 @@ const Hero = ({ theme }) => {
           ))}
         </div>
 
-        {/* RESPONSIVE LAYOUT */}
+        {/* Layout */}
         <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div
-            className="
-              grid 
-              grid-cols-1 
-              xl:grid-cols-2 
-              gap-8 
-              items-center
-            "
-          >
-            {/* TEXT CONTENT - Left on desktop, top on mobile */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-center">
+            {/* TEXT */}
             <div className="max-w-2xl mx-auto text-left order-1 xl:order-1 pl-4 md:pl-8 xl:pl-12">
-              {/* Greeting */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -107,36 +105,27 @@ const Hero = ({ theme }) => {
                 <h2 className="text-2xl md:text-3xl text-blue-600 dark:text-blue-300 font-medium">
                   Hello,
                 </h2>
-
-                {/* Heading */}
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold flex items-center gap-4 leading-tight">
                   <span className="text-black dark:text-white">
                     {APP_CONFIG.name.split(" ")[0]}
                   </span>
-
                   <span
                     className="bg-clip-text text-transparent bg-gradient-to-r 
                     from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400"
                   >
                     here!
                   </span>
-
-                  {/* static emoji */}
                   <span className="inline-block">👋</span>
                 </h1>
               </motion.div>
 
-              {/* Description */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, delay: 0.12 }}
                 className="space-y-5 mb-8"
               >
-                <p
-                  className="text-lg md:text-xl font-medium text-gray-900 dark:text-gray-200 
-   leading-relaxed tracking-tight"
-                >
+                <p className="text-lg md:text-xl font-medium text-gray-900 dark:text-gray-200 leading-relaxed tracking-tight">
                   Full Stack Developer crafting
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     {" "}
@@ -150,7 +139,7 @@ const Hero = ({ theme }) => {
                 </p>
               </motion.div>
 
-              {/* Social Links */}
+              {/* SOCIALS */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -163,7 +152,6 @@ const Hero = ({ theme }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
-                    aria-label="GitHub"
                   >
                     <Github className="w-5 h-5 text-blue-400" />
                   </a>
@@ -172,7 +160,6 @@ const Hero = ({ theme }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
-                    aria-label="LinkedIn"
                   >
                     <Linkedin className="w-5 h-5 text-blue-400" />
                   </a>
@@ -181,21 +168,19 @@ const Hero = ({ theme }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
-                    aria-label="Instagram"
                   >
                     <Instagram className="w-5 h-5 text-blue-400" />
                   </a>
                   <a
                     href={`mailto:${APP_CONFIG.email}`}
                     className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
-                    aria-label="Email"
                   >
                     <Mail className="w-5 h-5 text-blue-400" />
                   </a>
                 </div>
               </motion.div>
 
-              {/* CTA Buttons */}
+              {/* CTA */}
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -223,27 +208,17 @@ const Hero = ({ theme }) => {
               </motion.div>
             </div>
 
-            {/* PHOTO - Right on desktop, bottom on mobile */}
+            {/* PHOTO */}
             <div className="flex justify-center order-2 xl:order-2 pr-4 md:pr-8 xl:pr-12">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="
-                  w-[260px] 
-                  sm:w-[300px] 
-                  md:w-[340px] 
-                  lg:w-[360px] 
-                  xl:w-[380px]
-                  rounded-2xl 
-                  overflow-hidden 
-                  shadow-2xl 
-                  dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]
-                "
+                className="w-[260px] sm:w-[300px] md:w-[340px] lg:w-[360px] xl:w-[380px] rounded-2xl overflow-hidden shadow-2xl dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]"
               >
                 <img
                   src="/me.jpeg"
-                  alt="Kamal Polisetty"
+                  alt={APP_CONFIG.name}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -252,88 +227,62 @@ const Hero = ({ theme }) => {
         </div>
       </section>
 
-      {/* PDF POPUP */}
-      {showPdfPopup && (
+      {/* DESKTOP POPUP ONLY */}
+      {isDesktop && showPdfPopup && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 md:p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 md:p-6"
           onClick={closePdfPopup}
           role="dialog"
           aria-modal="true"
         >
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.85, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
+            exit={{ scale: 0.85, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative bg-white dark:bg-gray-900 rounded-xl md:rounded-2xl shadow-2xl w-full max-w-6xl h-[95vh] md:h-[90vh] flex flex-col"
+            className="relative bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-3 md:p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
-                <div className="p-1.5 md:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex-shrink-0">
-                  <FileText className="h-4 w-4 md:h-6 md:w-6 text-blue-600 dark:text-blue-400" />
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                  <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-sm md:text-xl font-semibold text-gray-900 dark:text-white truncate">
-                    {APP_CONFIG.name} - Resume
-                  </h3>
-                  <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 truncate">
-                    {APP_CONFIG.title}
-                  </p>
-                </div>
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
+                  {APP_CONFIG.name} - Resume
+                </h3>
               </div>
-
-              <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
-                <button
-                  onClick={openPdfInNewTab}
-                  className="hidden sm:flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors font-medium text-sm"
-                >
-                  <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
-                  <span className="hidden md:inline">Open in Tab</span>
-                </button>
-
-                <button
-                  onClick={handleResumeDownload}
-                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm"
-                >
-                  <Download className="h-3 w-3 md:h-4 md:w-4" />
-                  <span className="hidden sm:inline">Download</span>
-                </button>
-
-                <button
-                  onClick={closePdfPopup}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                >
-                  <X className="h-4 w-4 md:h-6 md:w-6 text-gray-500 dark:text-gray-400" />
-                </button>
-              </div>
+              <button
+                onClick={closePdfPopup}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+              </button>
             </div>
 
-            {/* PDF VIEWER */}
-            <div className="flex-1 p-2 md:p-6">
-              <div className="w-full h-full bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
-                {!pdfError ? (
-                  <iframe
-                    src={`${APP_CONFIG.resume.path}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
-                    className="w-full h-full border-0"
-                    title="Resume Viewer"
-                    onError={handlePdfError}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center">
-                    <AlertCircle className="h-14 w-14 text-orange-500 mb-4" />
-                    <p className="text-gray-300">PDF preview unavailable.</p>
-                  </div>
-                )}
-              </div>
+            {/* PDF Viewer */}
+            <div className="flex-1 p-4">
+              {!pdfError ? (
+                <iframe
+                  src={`${APP_CONFIG.resume.path}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
+                  className="w-full h-full border-0 rounded-lg"
+                  title="Resume Viewer"
+                  onError={handlePdfError}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <AlertCircle className="h-14 w-14 text-orange-500 mb-4" />
+                  <p className="text-gray-300">PDF preview unavailable.</p>
+                </div>
+              )}
             </div>
 
-            <div className="p-3 md:p-6 border-t border-gray-200 dark:border-gray-700 text-gray-400 text-xs md:text-sm">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 text-gray-400 text-xs md:text-sm text-center">
               Last updated: {new Date().toLocaleDateString()}
             </div>
           </motion.div>

@@ -1,8 +1,8 @@
-/* FULL PROJECTS COMPONENT — ONLY TECH HOVER UPDATED */
+/* FULL PROJECTS COMPONENT — NO TAG EXPANSION, STYLES UNCHANGED */
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, ExternalLink, FileCode, Filter } from 'lucide-react';
+import { Github, ExternalLink, FileCode, Filter, X } from 'lucide-react';
 import { projects, getFeaturedProjects } from '../data/projects';
 import { trackProjectClick } from '../utils/analytics';
 import { ANIMATION_VARIANTS, APP_CONFIG } from '../config/constants';
@@ -13,14 +13,9 @@ const Projects = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const [expandedDesc, setExpandedDesc] = useState<Record<number, boolean>>({});
-  const [expandedTech, setExpandedTech] = useState<Record<number, boolean>>({});
 
   const toggleDesc = (id: number) => {
     setExpandedDesc(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const toggleTech = (id: number) => {
-    setExpandedTech(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   const filteredProjects = useMemo(() => {
@@ -46,6 +41,11 @@ const Projects = () => {
     { value: 'web', label: 'Web Apps', count: projects.filter(p => p.category === 'web').length },
     { value: 'mobile', label: 'Mobile', count: projects.filter(p => p.category === 'mobile').length },
   ];
+
+  const handleFilterSelect = (value: 'all' | 'featured' | 'web' | 'mobile') => {
+    setFilter(value);
+    setShowFilters(false);
+  };
 
   return (
     <section id="projects" className="section-padding bg-gray-50 dark:bg-gray-800">
@@ -84,15 +84,44 @@ const Projects = () => {
           <motion.div
             custom={3}
             variants={ANIMATION_VARIANTS.fadeIn}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 md:mb-8"
+            className="flex flex-col items-center justify-center gap-4 mb-6 md:mb-8"
           >
+            {/* Mobile Filter Toggle Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="sm:hidden flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg"
+              className="sm:hidden flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
             >
-              <Filter className="h-4 w-4" /> Filter Projects
+              {showFilters ? <X className="h-4 w-4" /> : <Filter className="h-4 w-4" />}
+              {showFilters ? 'Close Filters' : 'Filter Projects'}
             </button>
 
+            {/* Mobile Filter Dropdown */}
+            <AnimatePresence>
+              {showFilters && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="sm:hidden w-full max-w-sm flex flex-col gap-2 px-4"
+                >
+                  {filterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleFilterSelect(option.value as any)}
+                      className={`w-full px-4 py-3 rounded-lg transition-all text-sm font-medium ${
+                        filter === option.value
+                          ? 'bg-blue-600 text-white shadow-lg'
+                          : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600'
+                      }`}
+                    >
+                      {option.label} ({option.count})
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Desktop Filter Buttons */}
             <div className="hidden sm:flex gap-3 md:gap-4">
               {filterOptions.map((option) => (
                 <button
@@ -164,12 +193,9 @@ const Projects = () => {
                     )}
                   </div>
 
-                  {/* TECHNOLOGIES */}
+                  {/* TECHNOLOGIES (No expanding) */}
                   <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4">
-                    {(expandedTech[project.id]
-                      ? project.technologies
-                      : project.technologies.slice(0, 4)
-                    ).map((tech, index) => (
+                    {project.technologies.map((tech, index) => (
                       <span
                         key={index}
                         className="
@@ -184,24 +210,6 @@ const Projects = () => {
                         {tech}
                       </span>
                     ))}
-
-                    {project.technologies.length > 4 && (
-                      <button
-                        onClick={() => toggleTech(project.id)}
-                        className="
-                          px-2 py-1 text-xs font-medium 
-                          bg-blue-100 dark:bg-blue-900/30 
-                          text-blue-800 dark:text-blue-300 
-                          rounded 
-                          transition-colors
-                          hover:bg-blue-200 dark:hover:bg-blue-900/50
-                        "
-                      >
-                        {expandedTech[project.id]
-                          ? 'Show less'
-                          : `+${project.technologies.length - 4} more`}
-                      </button>
-                    )}
                   </div>
 
                   {/* ICONS */}

@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-scroll';
-import { Menu, X, Github, Linkedin, Instagram } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { NAVIGATION_ITEMS, APP_CONFIG } from '../config/constants';
-import { useScrollPosition } from '../hooks/useScrollPosition';
-import { trackSocialClick } from '../utils/analytics';
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-scroll";
+import { Menu, X, Github, Linkedin, Instagram } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { NAVIGATION_ITEMS, APP_CONFIG } from "../config/constants";
+import { useScrollPosition } from "../hooks/useScrollPosition";
+import { trackSocialClick } from "../utils/analytics";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,22 +18,19 @@ const Navbar = () => {
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (
-      !target.closest('.mobile-menu') &&
-      !target.closest('.menu-button')
-    ) {
+    if (!target.closest(".mobile-menu") && !target.closest(".menu-button")) {
       setIsMenuOpen(false);
     }
   }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
-      document.addEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
     } else {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     }
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [isMenuOpen, handleClickOutside]);
 
@@ -43,14 +40,17 @@ const Navbar = () => {
 
   const navbarClasses = `fixed top-0 left-0 w-full z-30 transition-all duration-300 ${
     scrolled
-      ? 'py-2 md:py-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20'
-      : 'py-4 md:py-5 bg-transparent'
+      ? "py-2 md:py-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
+      : "py-4 md:py-5 bg-transparent"
   }`;
 
   return (
-    <nav className={navbarClasses} role="navigation" aria-label="Main navigation">
+    <nav
+      className={navbarClasses}
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-
         {/* LOGO (responsive: Kamal -> Kamal Kiran -> Kamal Kiran Polisetty) */}
         <Link
           to="hero"
@@ -60,7 +60,10 @@ const Navbar = () => {
           duration={500}
           className="flex items-center space-x-2 cursor-pointer group focus:outline-none p-1"
         >
-          <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }} />
+          <motion.div
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+          />
 
           <span
             className="
@@ -102,7 +105,7 @@ const Navbar = () => {
               href={APP_CONFIG.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleSocialClick('GitHub')}
+              onClick={() => handleSocialClick("GitHub")}
               className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
             >
               <Github className="h-5 w-5" />
@@ -112,7 +115,7 @@ const Navbar = () => {
               href={APP_CONFIG.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleSocialClick('LinkedIn')}
+              onClick={() => handleSocialClick("LinkedIn")}
               className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
             >
               <Linkedin className="h-5 w-5" />
@@ -122,7 +125,7 @@ const Navbar = () => {
               href={APP_CONFIG.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleSocialClick('Instagram')}
+              onClick={() => handleSocialClick("Instagram")}
               className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
             >
               <Instagram className="h-5 w-5" />
@@ -137,7 +140,10 @@ const Navbar = () => {
                      hover:bg-blue-100 dark:hover:bg-blue-900/30 
                      hover:scale-105 active:scale-95"
         >
-          <motion.div animate={{ rotate: isMenuOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+          <motion.div
+            animate={{ rotate: isMenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
             {isMenuOpen ? (
               <X className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             ) : (
@@ -152,7 +158,7 @@ const Navbar = () => {
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="mobile-menu lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200/20 dark:border-gray-700/20"
@@ -194,6 +200,15 @@ const Navbar = () => {
                     className="p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
                   >
                     <Linkedin className="h-5 w-5" />
+                  </a>
+                  <a
+                    href={APP_CONFIG.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => handleSocialClick("Instagram")}
+                    className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
+                  >
+                    <Instagram className="h-5 w-5" />
                   </a>
                 </div>
               </div>
