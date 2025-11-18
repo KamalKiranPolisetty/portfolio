@@ -12,7 +12,7 @@ export const updateSEO = ({
 }: SEOProps) => {
   // Update title
   if (title) {
-    document.title = `${title} | ${APP_CONFIG.name}`;
+    document.title = `${APP_CONFIG.title}`;
   }
 
   // Update or create meta tags

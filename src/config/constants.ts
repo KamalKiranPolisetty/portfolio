@@ -1,30 +1,31 @@
 // Application constants and configuration
 export const APP_CONFIG = {
   name: 'Kamal Kiran Polisetty',
-  title: 'Full Stack Developer',
-  description: 'Passionate Full Stack Developer with 5+ years of experience building scalable web applications',
-  url: 'https://kamalkiranpolisetty.com',
-  email: 'kamalkiranpolisetty@gmail.com',
-  phone: '+1 (555) 123-4567', // Update with actual phone
-  location: 'Austin, TX',
+  title: import.meta.env.VITE_APP_TITLE,
+  description:import.meta.env.VITE_APP_DESCRIPTION,
+  url: import.meta.env.VITE_APP_URL,
+  email: import.meta.env.VITE_EMAIL,
+  phone: import.meta.env.VITE_PHONE, // Update with actual phone
+  location: import.meta.env.VITE_LOCATION,
   
   // Social links
   social: {
-    github: 'https://github.com/kamalkiranpolisetty',
-    linkedin: 'https://www.linkedin.com/in/kamalkiranpolisetty',
-    twitter: 'https://twitter.com/kamalkiranp', // Add if available
+    github: import.meta.env.VITE_GITHUB_URL,
+    instagram:import.meta.env.VITE_INSTAGRAM_URL,
+    linkedin: import.meta.env.VITE_LINKEDIN_URL,
+    twitter: import.meta.env.VITE_TWITTER_URL, // Add if available
   },
   
   // Resume
   resume: {
     filename: 'Kamal_Kiran_Polisetty_Resume.pdf',
-    path: '/kamal-resume.pdf'
+    path: '/kkp.pdf'
   },
   
   // Analytics (add your tracking IDs)
   analytics: {
-    googleAnalytics: '', // GA4 Measurement ID
-    hotjar: '', // Hotjar Site ID
+    googleAnalytics: import.meta.env.VITE_GA_MEASUREMENT_ID, // GA4 Measurement ID
+    hotjar: import.meta.env.VITE_HOTJAR_SITE_ID, // Hotjar Site ID
   },
   
   // Performance settings
@@ -48,8 +49,10 @@ export const APP_CONFIG = {
 export const NAVIGATION_ITEMS = [
   { name: 'About', to: 'about' },
   { name: 'Experience', to: 'experience' },
+  {name:'Education', to:'education'},
   { name: 'Skills', to: 'skills' },
   { name: 'Projects', to: 'projects' },
+  { name: "Certifications", to: "certifications" },
   { name: 'Contact', to: 'contact' }
 ] as const;
 

@@ -7,10 +7,10 @@ import emailjs from 'emailjs-com';
  */
 
 // Your actual EmailJS IDs
-const SERVICE_ID = 'service_uuget1x';
-const TEMPLATE_ID_AUTO_REPLY = 'template_dbdfrbg'; // Template for auto-reply to user
-const TEMPLATE_ID_NOTIFY_ME = 'template_5mg3gzw'; // Template for notification to you (create this)
-const USER_ID = 'ckep1zDjbUHQ2sb01'; // Replace with your actual EmailJS Public Key from dashboard
+export const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+export const TEMPLATE_ID_AUTO_REPLY = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_AUTO_REPLY;
+export const TEMPLATE_ID_NOTIFY_ME = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_NOTIFY;
+export const USER_ID = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 /**
  * Initialize EmailJS with your user ID

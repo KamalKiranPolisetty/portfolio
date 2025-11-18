@@ -1,104 +1,96 @@
-import { Experience } from '../types';
+import { Experience } from "../types";
 
+// Work Experience Only
 export const experiences: Experience[] = [
   {
     id: 1,
     type: "work",
-    title: "Full Stack Developer",
+    title: "Associate Software Engineer",
     company: "Capgemini",
-    date: "Aug 2021 - Present",
-    location: "Austin, TX",
+    date: "Jun 2022 – Jul 2023",
+    location: "Bangalore, India",
     description: [
-      "Led development of multiple client applications using React, Node.js, and MongoDB, serving over 10,000+ daily active users",
-      "Architected and implemented microservices infrastructure that improved system scalability by 300% and reduced response times by 45%",
-      "Managed a cross-functional team of 5 developers, implementing agile methodologies that increased delivery speed by 40%",
-      "Built comprehensive financial services dashboard that streamlined workflow processes, resulting in 30% efficiency improvement",
-      "Implemented automated CI/CD pipelines using Jenkins and Docker, reducing deployment time from hours to minutes",
-      "Optimized database queries and implemented caching strategies, improving application performance by 60%"
+      "Developed and optimized internal management system for Nokia using Spring Boot, Angular, and MySQL.",
+      "Implemented JWT authentication and role-based authorization improving security and API integrity.",
+      "Optimized backend APIs using caching, pagination, and lazy loading resulting in 35% faster response times.",
+      "Built Angular components for dashboards and real-time visualization integrated with Spring Boot APIs.",
+      "Contributed to CI/CD using Git, Maven, Docker, Jenkins enabling rapid automated deployments.",
+      "Collaborated in Agile sprints improving delivery speed and code quality by 25%."
     ],
-    technologies: ["React", "Node.js", "MongoDB", "AWS", "Docker", "Jenkins", "TypeScript", "GraphQL"]
+    technologies: [
+      "Java", "Spring Boot", "Spring MVC", "Hibernate",
+      "Spring Security", "JWT", "REST APIs",
+      "MySQL", "MongoDB", "Angular",
+      "Docker", "Jenkins", "Git"
+    ]
   },
   {
     id: 2,
     type: "work",
-    title: "Software Engineer",
+    title: "Software Intern",
     company: "Capgemini",
-    date: "Apr 2020 - Jul 2021",
-    location: "Austin, TX",
+    date: "Feb 2022 – Apr 2022",
+    location: "Bangalore, India",
     description: [
-      "Developed responsive web applications using React, TypeScript, and Material UI, ensuring cross-browser compatibility",
-      "Collaborated with UI/UX designers to implement pixel-perfect designs and smooth animations using Framer Motion",
-      "Integrated RESTful APIs and GraphQL endpoints, improving data fetching efficiency by 35%",
-      "Participated in code reviews and mentored junior developers, contributing to team knowledge sharing",
-      "Implemented comprehensive testing strategies using Jest and Cypress, achieving 90%+ code coverage",
-      "Worked in agile environment with sprint planning, daily standups, and retrospectives"
+      "Created Java-based integration workflows and REST APIs.",
+      "Developed MuleSoft-based API flows using DataWeave for transformations.",
+      "Configured CloudHub APIs with OAuth2 & rate-limiting security policies.",
+      "Improved workflow efficiency by 60% through optimized integrations.",
+      "Performed debugging, testing, and documentation for Java/Mule services."
     ],
-    technologies: ["React", "TypeScript", "Material UI", "GraphQL", "Jest", "Cypress", "Git", "Jira"]
+    technologies: [
+      "Java", "Spring Boot", "MuleSoft",
+      "CloudHub", "DataWeave",
+      "OAuth2", "REST APIs",
+      "Git", "Maven"
+    ]
   },
   {
     id: 3,
     type: "work",
-    title: "Software Developer Intern",
-    company: "Cureya",
-    date: "Jan 2020 - Apr 2020",
-    location: "Remote",
+    title: "Web Developer Intern",
+    company: "Cureeya",
+    date: "Jun 2021 – Sep 2021",
+    location: "Bangalore, India",
     description: [
-      "Developed healthcare management system using Angular and Spring Boot, handling patient data for 500+ users",
-      "Created responsive designs for web and mobile applications using SCSS and Bootstrap framework",
-      "Implemented secure user authentication and authorization using JWT tokens and OAuth 2.0",
-      "Built RESTful APIs for patient management, appointment scheduling, and medical records",
-      "Participated in code reviews and contributed to technical documentation and system architecture",
-      "Collaborated with healthcare professionals to understand requirements and ensure HIPAA compliance"
+      "Developed patient dashboards and scheduling features using React.",
+      "Built Java backend services for authentication and secure data access.",
+      "Improved rendering performance by 30% with React optimizations.",
+      "Integrated APIs ensuring HIPAA-compliant data handling.",
+      "Fixed UI bugs and enhanced dashboard stability reducing issues by 40%."
     ],
-    technologies: ["Angular", "Spring Boot", "Java", "PostgreSQL", "JWT", "OAuth", "Bootstrap", "SCSS"]
-  },
-  {
-    id: 4,
-    type: "education",
-    title: "Master of Science in Computer Science",
-    company: "Texas State University",
-    date: "Aug 2018 - Dec 2019",
-    location: "San Marcos, TX",
-    description: [
-      "Specialized in Software Engineering, Web Technologies, and Artificial Intelligence with focus on machine learning applications",
-      "Completed advanced coursework in Algorithms & Data Structures, Database Systems, Web Engineering, and AI/ML",
-      "Served as Graduate Teaching Assistant for Introduction to Programming, mentoring 50+ undergraduate students",
-      "Developed machine learning model for predicting student performance using Python and scikit-learn as thesis project",
-      "Participated in research projects on web accessibility and user experience optimization",
-      "Maintained excellent academic standing with GPA of 3.8/4.0"
-    ],
-    technologies: ["Python", "Java", "Machine Learning", "Data Analysis", "Web Technologies", "Database Design"]
-  },
-  {
-    id: 5,
-    type: "education",
-    title: "Bachelor of Technology in Computer Science",
-    company: "JNTU Hyderabad",
-    date: "Aug 2014 - May 2018",
-    location: "Hyderabad, India",
-    description: [
-      "Comprehensive study of computer science fundamentals including programming, data structures, and software engineering",
-      "Completed projects in web development, mobile applications, and database management systems",
-      "Active member of coding club and participated in various hackathons and programming competitions",
-      "Completed internship projects in Java web development and Android application development",
-      "Graduated with First Class Honors and recognition for academic excellence"
-    ],
-    technologies: ["Java", "C++", "Android", "MySQL", "Web Development", "Data Structures", "Algorithms"]
+    technologies: [
+      "React", "JavaScript", "Java",
+      "Spring Boot", "REST APIs",
+      "MySQL", "CSS", "Postman"
+    ]
   }
 ];
 
-// Helper functions
-export const getWorkExperience = (): Experience[] => {
-  return experiences.filter(exp => exp.type === 'work');
+// Helper function to convert "Jun 2022 – Jul 2023" → dates
+const parseDateRange = (dateRange: string): { start: Date; end: Date } => {
+  const [startStr, endStr] = dateRange.split("–").map(str => str.trim());
+
+  const start = new Date(startStr);
+  const end = endStr === "Present" ? new Date() : new Date(endStr);
+
+  return { start, end };
 };
 
-export const getEducation = (): Experience[] => {
-  return experiences.filter(exp => exp.type === 'education');
-};
-
+// Calculate total experience in years (with decimals)
 export const getTotalWorkExperience = (): number => {
-  const workExp = getWorkExperience();
-  // Calculate total years of experience
-  // This is a simplified calculation - you might want to make it more precise
-  return workExp.length > 0 ? 5 : 0; // Based on the current data
+  let totalMonths = 0;
+
+  experiences.forEach(exp => {
+    const { start, end } = parseDateRange(exp.date);
+
+    const months =
+      (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth());
+
+    totalMonths += months;
+  });
+
+  const years = totalMonths / 12;
+  return parseFloat(years.toFixed(1)); // round to 1 decimal (e.g., 2.1 yrs)
 };

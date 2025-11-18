@@ -1,28 +1,45 @@
-import { useState, FormEvent, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Send, Linkedin, Github, CheckCircle, AlertCircle, Phone, MapPin } from 'lucide-react';
-import { sendEmail, initEmailJS } from './EmailService';
-import { ContactFormData } from '../types';
-import { APP_CONFIG, ANIMATION_VARIANTS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../config/constants';
-import { trackContactFormSubmit, trackSocialClick } from '../utils/analytics';
+import { useState, FormEvent, useRef } from "react";
+import { motion } from "framer-motion";
+import {
+  Mail,
+  Send,
+  Linkedin,
+  Github,
+  CheckCircle,
+  AlertCircle,
+  Phone,
+  MapPin,
+  Instagram,
+} from "lucide-react";
+import { sendEmail, initEmailJS } from "./EmailService";
+import { ContactFormData } from "../types";
+import {
+  APP_CONFIG,
+  ANIMATION_VARIANTS,
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES,
+} from "../config/constants";
+import { trackContactFormSubmit, trackSocialClick } from "../utils/analytics";
 
 const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     // Clear error when user starts typing
     if (error) setError(null);
   };
@@ -31,19 +48,19 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-    
+
     try {
       initEmailJS();
       await sendEmail(formData);
-      
+
       setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: "", email: "", subject: "", message: "" });
       trackContactFormSubmit();
-      
+
       // Auto-hide success message after 5 seconds
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      console.error('Error sending email:', err);
+      console.error("Error sending email:", err);
       setError(ERROR_MESSAGES.emailSend);
     } finally {
       setIsSubmitting(false);
@@ -56,44 +73,59 @@ const Contact = () => {
 
   const contactInfo = [
     {
-      icon: <Mail className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <Mail className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+      ),
       title: "Email",
       content: APP_CONFIG.email,
       link: `mailto:${APP_CONFIG.email}`,
-      description: "Send me an email"
+      description: "Send me an email",
     },
     {
-      icon: <Phone className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <Phone className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+      ),
       title: "Phone",
       content: APP_CONFIG.phone,
       link: `tel:${APP_CONFIG.phone}`,
-      description: "Give me a call"
+      description: "Give me a call",
     },
     {
-      icon: <MapPin className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <MapPin className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+      ),
       title: "Location",
       content: APP_CONFIG.location,
-      link: `https://maps.google.com/?q=${encodeURIComponent(APP_CONFIG.location)}`,
-      description: "Find me here"
+      link: `https://maps.google.com/?q=${encodeURIComponent(
+        APP_CONFIG.location
+      )}`,
+      description: "Find me here",
     },
     {
-      icon: <Linkedin className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <Linkedin className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+      ),
       title: "LinkedIn",
       content: "linkedin.com/in/kamalkiranpolisetty",
       link: APP_CONFIG.social.linkedin,
-      description: "Connect professionally"
+      description: "Connect professionally",
     },
     {
-      icon: <Github className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <Github className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+      ),
       title: "GitHub",
       content: "github.com/kamalkiranpolisetty",
       link: APP_CONFIG.social.github,
-      description: "View my code"
-    }
+      description: "View my code",
+    },
   ];
 
   return (
-    <section id="contact" className="section-padding bg-white dark:bg-gray-900 relative overflow-hidden">
+    <section
+      id="contact"
+      className="section-padding bg-white dark:bg-gray-900 relative overflow-hidden"
+    >
       {/* Background decoration */}
       <div className="absolute right-0 bottom-0 w-32 h-32 md:w-64 md:h-64 bg-blue-100 dark:bg-blue-900/20 rounded-full opacity-50 -z-10 transform translate-x-1/4 translate-y-1/4 pointer-events-none"></div>
       <div className="absolute left-0 top-0 w-24 h-24 md:w-48 md:h-48 bg-indigo-100 dark:bg-indigo-900/20 rounded-full opacity-50 -z-10 transform -translate-x-1/4 -translate-y-1/4 pointer-events-none"></div>
@@ -110,7 +142,8 @@ const Contact = () => {
             variants={ANIMATION_VARIANTS.fadeIn}
             className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center select-none"
           >
-            Get In <span className="text-blue-600 dark:text-blue-400">Touch</span>
+            Get In{" "}
+            <span className="text-blue-600 dark:text-blue-400">Touch</span>
           </motion.h2>
           <motion.div
             custom={1}
@@ -122,8 +155,9 @@ const Contact = () => {
             variants={ANIMATION_VARIANTS.fadeIn}
             className="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto select-none text-sm md:text-base px-4"
           >
-            Feel free to reach out if you're looking for a developer, have a question, or just want to connect.
-            I'm always open to discussing new opportunities and interesting projects.
+            Feel free to reach out if you're looking for a developer, have a
+            question, or just want to connect. I'm always open to discussing new
+            opportunities and interesting projects.
           </motion.p>
         </motion.div>
 
@@ -136,15 +170,25 @@ const Contact = () => {
             variants={ANIMATION_VARIANTS.slideIn}
             className="order-2 lg:order-1"
           >
-            <h3 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 select-none">Contact Information</h3>
+            <h3 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 select-none">
+              Contact Information
+            </h3>
             <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
               {contactInfo.map((info, index) => (
                 <motion.a
                   key={index}
                   href={info.link}
-                  target={info.link.startsWith('http') ? "_blank" : undefined}
-                  rel={info.link.startsWith('http') ? "noopener noreferrer" : undefined}
-                  onClick={() => info.title === 'LinkedIn' || info.title === 'GitHub' ? handleSocialClick(info.title) : undefined}
+                  target={info.link.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    info.link.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  onClick={() =>
+                    info.title === "LinkedIn" || info.title === "GitHub"
+                      ? handleSocialClick(info.title)
+                      : undefined
+                  }
                   custom={index}
                   variants={ANIMATION_VARIANTS.fadeIn}
                   initial="hidden"
@@ -156,14 +200,20 @@ const Contact = () => {
                     {info.icon}
                   </div>
                   <div className="pointer-events-none min-w-0 flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 select-none text-sm md:text-base">{info.title}</h4>
-                    <p className="text-gray-600 dark:text-gray-400 select-none text-xs md:text-sm break-all">{info.content}</p>
-                    <p className="text-gray-500 dark:text-gray-500 select-none text-xs mt-1">{info.description}</p>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100 select-none text-sm md:text-base">
+                      {info.title}
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-400 select-none text-xs md:text-sm break-all">
+                      {info.content}
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-500 select-none text-xs mt-1">
+                      {info.description}
+                    </p>
                   </div>
                 </motion.a>
               ))}
             </div>
-            
+
             {/* Social Links */}
             <motion.div
               initial="hidden"
@@ -173,27 +223,45 @@ const Contact = () => {
               custom={contactInfo.length}
               className="mt-6 md:mt-8"
             >
-              <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 select-none">Follow Me</h3>
+              <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 select-none">
+                Follow Me
+              </h3>
+
               <div className="flex space-x-3 md:space-x-4">
-                <a 
+                {/* GitHub */}
+                <a
                   href={APP_CONFIG.social.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => handleSocialClick('GitHub')}
+                  onClick={() => handleSocialClick("GitHub")}
                   className="p-2 md:p-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label="Visit GitHub profile"
                 >
                   <Github className="h-4 w-4 md:h-5 md:w-5 pointer-events-none" />
                 </a>
-                <a 
+
+                {/* LinkedIn */}
+                <a
                   href={APP_CONFIG.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => handleSocialClick('LinkedIn')}
+                  onClick={() => handleSocialClick("LinkedIn")}
                   className="p-2 md:p-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label="Visit LinkedIn profile"
                 >
                   <Linkedin className="h-4 w-4 md:h-5 md:w-5 pointer-events-none" />
+                </a>
+
+                {/* Instagram */}
+                <a
+                  href={APP_CONFIG.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleSocialClick("Instagram")}
+                  className="p-2 md:p-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  aria-label="Visit Instagram profile"
+                >
+                  <Instagram className="h-4 w-4 md:h-5 md:w-5 pointer-events-none" />
                 </a>
               </div>
             </motion.div>
@@ -208,8 +276,10 @@ const Contact = () => {
             className="order-1 lg:order-2"
           >
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 border border-gray-100 dark:border-gray-700">
-              <h3 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 select-none">Send Me a Message</h3>
-              
+              <h3 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 select-none">
+                Send Me a Message
+              </h3>
+
               {/* Success Message */}
               {submitted && (
                 <motion.div
@@ -219,8 +289,12 @@ const Contact = () => {
                 >
                   <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0 pointer-events-none" />
                   <div className="pointer-events-none">
-                    <p className="font-medium select-none text-sm md:text-base">Thank you for your message!</p>
-                    <p className="text-xs md:text-sm mt-1 select-none">{SUCCESS_MESSAGES.emailSent}</p>
+                    <p className="font-medium select-none text-sm md:text-base">
+                      Thank you for your message!
+                    </p>
+                    <p className="text-xs md:text-sm mt-1 select-none">
+                      {SUCCESS_MESSAGES.emailSent}
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -234,18 +308,30 @@ const Contact = () => {
                 >
                   <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0 pointer-events-none" />
                   <div className="pointer-events-none">
-                    <p className="font-medium select-none text-sm md:text-base">Error</p>
-                    <p className="text-xs md:text-sm mt-1 select-none">{error}</p>
+                    <p className="font-medium select-none text-sm md:text-base">
+                      Error
+                    </p>
+                    <p className="text-xs md:text-sm mt-1 select-none">
+                      {error}
+                    </p>
                   </div>
                 </motion.div>
               )}
 
               {/* Contact Form */}
               {!submitted && (
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 md:space-y-6" noValidate>
+                <form
+                  ref={formRef}
+                  onSubmit={handleSubmit}
+                  className="space-y-4 md:space-y-6"
+                  noValidate
+                >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2 select-none cursor-default">
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-medium mb-2 select-none cursor-default"
+                      >
                         Your Name *
                       </label>
                       <input
@@ -259,9 +345,12 @@ const Contact = () => {
                         placeholder="Enter your full name"
                       />
                     </div>
-                    
+
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2 select-none cursor-default">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium mb-2 select-none cursor-default"
+                      >
                         Your Email *
                       </label>
                       <input
@@ -276,9 +365,12 @@ const Contact = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium mb-2 select-none cursor-default">
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium mb-2 select-none cursor-default"
+                    >
                       Subject *
                     </label>
                     <input
@@ -292,9 +384,12 @@ const Contact = () => {
                       placeholder="What's this about?"
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2 select-none cursor-default">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium mb-2 select-none cursor-default"
+                    >
                       Message *
                     </label>
                     <textarea
@@ -308,7 +403,7 @@ const Contact = () => {
                       placeholder="Tell me about your project or just say hello!"
                     ></textarea>
                   </div>
-                  
+
                   <button
                     type="submit"
                     disabled={isSubmitting}

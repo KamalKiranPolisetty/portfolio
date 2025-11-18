@@ -9,7 +9,7 @@ const STATIC_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/logo.svg',
-  '/kamal-resume.pdf',
+  '/kkp.pdf',
   // Add other critical assets
 ];
 

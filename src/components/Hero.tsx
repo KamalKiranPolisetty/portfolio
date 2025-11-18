@@ -1,12 +1,21 @@
-import { motion } from 'framer-motion';
-import { ArrowDownCircle, Mail, FileText, X, Download, Eye, ExternalLink, AlertCircle } from 'lucide-react';
-import { Link } from 'react-scroll';
-import { TypeAnimation } from 'react-type-animation';
-import { useState } from 'react';
-import { APP_CONFIG } from '../config/constants';
-import { trackResumeDownload, trackResumeView } from '../utils/analytics';
+import { motion } from "framer-motion";
+import {
+  Mail,
+  FileText,
+  X,
+  Download,
+  ExternalLink,
+  AlertCircle,
+  Github,
+  Linkedin,
+  Instagram,
+} from "lucide-react";
+import { Link } from "react-scroll";
+import { useState } from "react";
+import { APP_CONFIG } from "../config/constants";
+import { trackResumeDownload, trackResumeView } from "../utils/analytics";
 
-const Hero = () => {
+const Hero = ({ theme }) => {
   const [showPdfPopup, setShowPdfPopup] = useState(false);
   const [pdfError, setPdfError] = useState(false);
 
@@ -18,22 +27,20 @@ const Hero = () => {
 
   const handleResumeDownload = () => {
     try {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = APP_CONFIG.resume.path;
       link.download = APP_CONFIG.resume.filename;
-      link.setAttribute('target', '_blank');
+      link.setAttribute("target", "_blank");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       trackResumeDownload();
     } catch (error) {
-      alert('Resume download not available. Please contact me directly for my latest resume.');
+      alert("Resume download not available. Please contact me directly.");
     }
   };
 
-  const handlePdfError = () => {
-    setPdfError(true);
-  };
+  const handlePdfError = () => setPdfError(true);
 
   const closePdfPopup = () => {
     setShowPdfPopup(false);
@@ -42,138 +49,210 @@ const Hero = () => {
 
   const openPdfInNewTab = () => {
     try {
-      window.open(APP_CONFIG.resume.path, '_blank');
+      window.open(APP_CONFIG.resume.path, "_blank");
     } catch (error) {
-      alert('Unable to open PDF. Please contact me directly for my latest resume.');
+      alert("Unable to open PDF.");
     }
   };
 
   return (
     <>
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-gray-900 dark:to-indigo-950">
-        {/* Background elements */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute -top-20 md:-top-40 -right-20 md:-right-40 w-40 h-40 md:w-80 md:h-80 bg-blue-300/20 dark:bg-blue-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-30 md:-bottom-60 -left-30 md:-left-60 w-48 h-48 md:w-96 md:h-96 bg-indigo-300/20 dark:bg-indigo-700/10 rounded-full blur-3xl"></div>
+      <section
+        id="hero"
+        className="relative min-h-screen flex items-center overflow-hidden"
+      >
+        {/* Animated dots pattern */}
+        <div className="absolute inset-0 -z-5">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 dark:bg-blue-300 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                opacity: [0.2, 0.8, 0.2],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 2 + Math.random() * 3,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            />
+          ))}
         </div>
 
+        {/* RESPONSIVE LAYOUT */}
         <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="relative mb-6"
-            >
-              <span className="absolute -top-4 md:-top-8 left-0 text-3xl md:text-5xl opacity-20" role="img" aria-label="waving hand">👋</span>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 leading-tight">
-                Hi, I'm {APP_CONFIG.name.split(' ')[0]} {APP_CONFIG.name.split(' ')[1]}
-              </h1>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-gray-700 dark:text-gray-300 mb-8 h-12 md:h-16"
-            >
-              <TypeAnimation
-                sequence={[
-                  'Full Stack Developer',
-                  1500,
-                  'Software Engineer',
-                  1500,
-                  'UI/UX Enthusiast',
-                  1500,
-                  'Problem Solver',
-                  1500,
-                ]}
-                wrapper="span"
-                speed={50}
-                repeat={Infinity}
-                className="bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent"
-              />
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-gray-600 dark:text-gray-400 max-w-3xl mb-12 text-base sm:text-lg md:text-xl leading-relaxed px-4"
-            >
-              {APP_CONFIG.description}. Let's transform your ideas into impactful solutions.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full max-w-2xl px-4"
-            >
-              <Link
-                to="contact"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-                className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-full flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          <div
+            className="
+              grid 
+              grid-cols-1 
+              xl:grid-cols-2 
+              gap-8 
+              items-center
+            "
+          >
+            {/* TEXT CONTENT - Left on desktop, top on mobile */}
+            <div className="max-w-2xl mx-auto text-left order-1 xl:order-1 pl-4 md:pl-8 xl:pl-12">
+              {/* Greeting */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="space-y-3 mb-6"
               >
-                <Mail className="h-4 w-4 md:h-5 md:w-5" />
-                Let's Connect
-              </Link>
-              
-              <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
+                <h2 className="text-2xl md:text-3xl text-blue-600 dark:text-blue-300 font-medium">
+                  Hello,
+                </h2>
+
+                {/* Heading */}
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold flex items-center gap-4 leading-tight">
+                  <span className="text-black dark:text-white">
+                    {APP_CONFIG.name.split(" ")[0]}
+                  </span>
+
+                  <span
+                    className="bg-clip-text text-transparent bg-gradient-to-r 
+                    from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400"
+                  >
+                    here!
+                  </span>
+
+                  {/* static emoji */}
+                  <span className="inline-block">👋</span>
+                </h1>
+              </motion.div>
+
+              {/* Description */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.12 }}
+                className="space-y-5 mb-8"
+              >
+                <p
+                  className="text-lg md:text-xl font-medium text-gray-900 dark:text-gray-200 
+   leading-relaxed tracking-tight"
+                >
+                  Full Stack Developer crafting
+                  <span className="font-semibold text-blue-600 dark:text-blue-400">
+                    {" "}
+                    scalable applications{" "}
+                  </span>
+                  & intelligent{" "}
+                  <span className="font-semibold text-blue-600 dark:text-blue-400">
+                    AI-powered solutions
+                  </span>
+                  .
+                </p>
+              </motion.div>
+
+              {/* Social Links */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex flex-wrap items-center gap-4 mb-6"
+              >
+                <div className="flex gap-3">
+                  <a
+                    href={APP_CONFIG.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    aria-label="GitHub"
+                  >
+                    <Github className="w-5 h-5 text-blue-400" />
+                  </a>
+                  <a
+                    href={APP_CONFIG.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin className="w-5 h-5 text-blue-400" />
+                  </a>
+                  <a
+                    href={APP_CONFIG.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-5 h-5 text-blue-400" />
+                  </a>
+                  <a
+                    href={`mailto:${APP_CONFIG.email}`}
+                    className="w-10 h-10 rounded-full bg-blue-900/10 dark:bg-blue-900/20 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 flex items-center justify-center transition-all"
+                    aria-label="Email"
+                  >
+                    <Mail className="w-5 h-5 text-blue-400" />
+                  </a>
+                </div>
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.45 }}
+                className="flex flex-wrap gap-4"
+              >
                 <button
                   onClick={handleResumeView}
-                  className="flex-1 sm:flex-none px-4 md:px-6 py-3 md:py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-full flex items-center justify-center gap-2 transition-all hover:bg-blue-50 dark:hover:bg-gray-700 transform hover:scale-105 shadow-lg hover:shadow-xl group text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-md transition-all shadow"
                 >
-                  <Eye className="h-4 w-4 md:h-5 md:w-5 transition-transform group-hover:scale-110" />
-                  <span className="hidden sm:inline">View Resume</span>
-                  <span className="sm:hidden">View</span>
+                  Resume
                 </button>
-                <button
-                  onClick={handleResumeDownload}
-                  className="flex-1 sm:flex-none px-4 md:px-6 py-3 md:py-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-full flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl group text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                >
-                  <Download className="h-4 w-4 md:h-5 md:w-5 transition-transform group-hover:scale-110" />
-                  <span className="hidden sm:inline">Download</span>
-                  <span className="sm:hidden">DL</span>
-                </button>
-              </div>
-            </motion.div>
-          </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 1 }}
-            className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2"
-          >
-            <Link
-              to="about"
-              spy={true}
-              smooth={true}
-              offset={-70}
-              duration={500}
-              className="flex flex-col items-center cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-2"
-              aria-label="Scroll to about section"
-            >
-              <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                Explore More
-              </span>
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-              >
-                <ArrowDownCircle className="w-5 h-5 md:w-6 md:h-6" />
+                <Link
+                  to="contact"
+                  spy={true}
+                  smooth={true}
+                  offset={-70}
+                  duration={500}
+                  className="px-6 py-2 border-2 border-blue-500 text-blue-400 rounded-md hover:bg-blue-500 hover:text-white transition-all cursor-pointer flex items-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  Let's Connect
+                </Link>
               </motion.div>
-            </Link>
-          </motion.div>
+            </div>
+
+            {/* PHOTO - Right on desktop, bottom on mobile */}
+            <div className="flex justify-center order-2 xl:order-2 pr-4 md:pr-8 xl:pr-12">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                className="
+                  w-[260px] 
+                  sm:w-[300px] 
+                  md:w-[340px] 
+                  lg:w-[360px] 
+                  xl:w-[380px]
+                  rounded-2xl 
+                  overflow-hidden 
+                  shadow-2xl 
+                  dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]
+                "
+              >
+                <img
+                  src="/me.jpeg"
+                  alt="Kamal Polisetty"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* PDF Popup Modal - Enhanced with better accessibility */}
+      {/* PDF POPUP */}
       {showPdfPopup && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -184,7 +263,6 @@ const Hero = () => {
           onClick={closePdfPopup}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="pdf-modal-title"
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -201,7 +279,7 @@ const Hero = () => {
                   <FileText className="h-4 w-4 md:h-6 md:w-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 id="pdf-modal-title" className="text-sm md:text-xl font-semibold text-gray-900 dark:text-white truncate">
+                  <h3 className="text-sm md:text-xl font-semibold text-gray-900 dark:text-white truncate">
                     {APP_CONFIG.name} - Resume
                   </h3>
                   <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 truncate">
@@ -209,91 +287,54 @@ const Hero = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
                 <button
                   onClick={openPdfInNewTab}
-                  className="hidden sm:flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  title="Open in New Tab"
+                  className="hidden sm:flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors font-medium text-sm"
                 >
                   <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
                   <span className="hidden md:inline">Open in Tab</span>
                 </button>
+
                 <button
                   onClick={handleResumeDownload}
-                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  title="Download Resume"
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm"
                 >
                   <Download className="h-3 w-3 md:h-4 md:w-4" />
                   <span className="hidden sm:inline">Download</span>
                 </button>
+
                 <button
                   onClick={closePdfPopup}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  title="Close"
-                  aria-label="Close resume viewer"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 >
                   <X className="h-4 w-4 md:h-6 md:w-6 text-gray-500 dark:text-gray-400" />
                 </button>
               </div>
             </div>
 
-            {/* PDF Viewer */}
+            {/* PDF VIEWER */}
             <div className="flex-1 p-2 md:p-6">
               <div className="w-full h-full bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
                 {!pdfError ? (
                   <iframe
                     src={`${APP_CONFIG.resume.path}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
                     className="w-full h-full border-0"
-                    title={`${APP_CONFIG.name} Resume`}
-                    onLoad={() => setPdfError(false)}
+                    title="Resume Viewer"
                     onError={handlePdfError}
                   />
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8">
-                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-orange-100 dark:bg-orange-900/30 rounded-full">
-                      <AlertCircle className="h-12 w-12 md:h-16 md:w-16 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <h4 className="text-lg md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">
-                      PDF Preview Unavailable
-                    </h4>
-                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-4 md:mb-6 max-w-md leading-relaxed">
-                      The PDF couldn't be displayed in the browser. This might be due to browser security settings or the file location.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
-                      <button 
-                        onClick={handleResumeDownload}
-                        className="flex-1 px-4 md:px-6 py-2 md:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <Download className="h-4 w-4 md:h-5 md:w-5" />
-                        Download Resume
-                      </button>
-                      <button 
-                        onClick={openPdfInNewTab}
-                        className="flex-1 px-4 md:px-6 py-2 md:py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-500"
-                      >
-                        <ExternalLink className="h-4 w-4 md:h-5 md:w-5" />
-                        Open in Tab
-                      </button>
-                    </div>
-                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-3 md:mt-4">
-                      You can also contact me directly for my latest resume
-                    </p>
+                  <div className="flex flex-col items-center justify-center h-full text-center">
+                    <AlertCircle className="h-14 w-14 text-orange-500 mb-4" />
+                    <p className="text-gray-300">PDF preview unavailable.</p>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="p-3 md:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-              <div className="flex flex-col sm:flex-row items-center justify-between text-xs md:text-sm text-gray-500 dark:text-gray-400 gap-2">
-                <p className="text-center sm:text-left">
-                  {!pdfError 
-                    ? "Click and drag to scroll • Use browser zoom for better readability" 
-                    : "Having trouble viewing? Try downloading or opening in a new tab"
-                  }
-                </p>
-                <p className="text-center sm:text-right">Last updated: {new Date().toLocaleDateString()}</p>
-              </div>
+            <div className="p-3 md:p-6 border-t border-gray-200 dark:border-gray-700 text-gray-400 text-xs md:text-sm">
+              Last updated: {new Date().toLocaleDateString()}
             </div>
           </motion.div>
         </motion.div>

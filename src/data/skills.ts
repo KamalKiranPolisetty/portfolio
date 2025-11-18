@@ -1,71 +1,149 @@
-import { SkillCategory } from '../types';
+import { SkillCategory } from "../types";
 
 export const skillCategories: SkillCategory[] = [
   {
     name: "Frontend Development",
     skills: [
-      "React", "Next.js", "Vue.js", "Angular", "TypeScript", "JavaScript (ES6+)",
-      "HTML5", "CSS3", "SASS/SCSS", "Tailwind CSS", "Material UI", "Styled Components",
-      "Redux", "Zustand", "React Query", "Framer Motion", "Three.js"
+      "React",
+      "Angular",
+      "React Native",
+      "JavaScript",
+      "TypeScript",
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "Material UI",
+      "React Query"
     ]
   },
+
   {
     name: "Backend Development",
     skills: [
-      "Node.js", "Express.js", "Nest.js", "Java", "Spring Boot", "Python", "Django",
-      "Flask", "PHP", "Laravel", "GraphQL", "REST APIs", "Microservices",
-      "WebSocket", "Socket.io", "JWT Authentication", "OAuth 2.0"
+      "Java",
+      "Spring Boot",
+      "Spring MVC",
+      "Spring Security",
+      "Spring Data JPA",
+      "Hibernate",
+      "REST APIs",
+      "GraphQL",
+      "Microservices",
+      "WebSocket",
+      "Node.js",
+      "Express.js",
+      "Python",
+      "FastAPI",
+      "Flask",
+      "JWT Authentication",
+      "OAuth 2.0"
     ]
   },
+
   {
     name: "Database & Storage",
     skills: [
-      "MongoDB", "PostgreSQL", "MySQL", "SQLite", "Redis", "Elasticsearch",
-      "Firebase Firestore", "AWS DynamoDB", "Prisma", "Mongoose", "Sequelize",
-      "Database Design", "Query Optimization", "Data Modeling"
+      "MySQL",
+      "PostgreSQL",
+      "MongoDB",
+      "AWS DynamoDB",
+      "Redis",
+      "Elasticsearch",
+      "Firebase Firestore",
+      "Database Design",
+      "Query Optimization",
+      "Data Modeling"
     ]
   },
+
   {
-    name: "Cloud & DevOps",
+    name: "AI, ML & Data Science",
     skills: [
-      "AWS (EC2, S3, Lambda, RDS)", "Google Cloud Platform", "Microsoft Azure",
-      "Docker", "Kubernetes", "Jenkins", "GitHub Actions", "GitLab CI/CD",
-      "Terraform", "Nginx", "Apache", "Linux/Unix", "Bash Scripting"
+      // AI frameworks
+      "LangChain",
+      "LangGraph",
+      "RAG Pipelines",
+      "Vector Stores",
+      "Hugging Face Models",
+
+      // Python data stack
+      "Pandas",
+      "NumPy",
+      "Matplotlib",
+      "Seaborn",
+      "SciPy",
+      "Scikit-Learn",
+      "PyTorch",
+      "TensorFlow",
+      "Keras",
+
+      // ML concepts (cleanly grouped)
+      "ML Pipelines",
+      "Data Preprocessing",
+      "Feature Engineering",
+      "Model Evaluation",
+      "EDA (Exploratory Data Analysis)",
+
+      // Algorithms (grouped)
+      "Supervised Learning (Regression, Classification)",
+      "Unsupervised Learning (Clustering)",
+      "Deep Learning (Neural Networks, CNNs, RNNs)",
+
+      // NLP & retrieval
+      "NLP",
+      "Semantic Search"
     ]
   },
+
   {
     name: "Testing & Quality Assurance",
     skills: [
-      "Jest", "React Testing Library", "Cypress", "Playwright", "Mocha", "Chai",
-      "Selenium", "Unit Testing", "Integration Testing", "E2E Testing",
-      "Test-Driven Development (TDD)", "Behavior-Driven Development (BDD)"
+      "JUnit",
+      "Jest",
+      "React Testing Library",
+      "Mocha",
+      "API Testing",
+      "Integration Testing",
+      "Unit Testing",
+      "Test-Driven Development (TDD)",
+      "Behavior-Driven Development (BDD)"
     ]
   },
+
+  {
+    name: "Cloud & DevOps",
+    skills: [
+      "AWS (EC2, S3, Lambda, RDS, API Gateway, Route 53)",
+      "Google Cloud Platform",
+      "Docker",
+      "Jenkins",
+      "GitHub Actions",
+      "Linux",
+      "Terraform",
+      "Bash Scripting"
+    ]
+  },
+
   {
     name: "Tools & Technologies",
     skills: [
-      "Git", "GitHub", "GitLab", "Bitbucket", "VS Code", "IntelliJ IDEA",
-      "Postman", "Insomnia", "Figma", "Adobe XD", "Jira", "Confluence",
-      "Slack", "Discord", "Notion", "Linear"
-    ]
-  },
-  {
-    name: "Mobile Development",
-    skills: [
-      "React Native", "Flutter", "Android (Java/Kotlin)", "iOS (Swift)",
-      "Expo", "Progressive Web Apps (PWA)", "Responsive Design",
-      "Mobile-First Development", "App Store Deployment"
-    ]
-  },
-  {
-    name: "Data & Analytics",
-    skills: [
-      "Python", "Pandas", "NumPy", "Matplotlib", "D3.js", "Chart.js",
-      "Google Analytics", "Mixpanel", "Hotjar", "A/B Testing",
-      "Data Visualization", "Statistical Analysis"
+      "Git",
+      "GitHub",
+      "VS Code",
+      "IntelliJ IDEA",
+      "Eclipse",
+      "Postman",
+      "Swagger",
+      "Maven",
+      "Gradle",
+      "Jira",
+      "Confluence"
     ]
   }
 ];
+
+// Helper functions remain unchanged…
+
 
 // Helper functions
 export const getAllSkills = (): string[] => {

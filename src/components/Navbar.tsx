@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-scroll';
-import { Menu, X, Code, Github, Linkedin } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Instagram } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAVIGATION_ITEMS, APP_CONFIG } from '../config/constants';
 import { useScrollPosition } from '../hooks/useScrollPosition';
@@ -11,69 +11,75 @@ const Navbar = () => {
   const { scrollPosition } = useScrollPosition();
   const scrolled = scrollPosition > 20;
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setIsMenuOpen((prev) => !prev);
+  };
 
-  // Close mobile menu when clicking outside
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (
+      !target.closest('.mobile-menu') &&
+      !target.closest('.menu-button')
+    ) {
+      setIsMenuOpen(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (isMenuOpen && !target.closest('.mobile-menu') && !target.closest('.menu-button')) {
-        setIsMenuOpen(false);
-      }
+    if (isMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.removeEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
     };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isMenuOpen]);
-
-  // Close mobile menu on escape key
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, handleClickOutside]);
 
   const handleSocialClick = (platform: string) => {
     trackSocialClick(platform);
   };
 
-  const navbarClasses = `fixed w-full z-30 transition-all duration-300 ${
-    scrolled 
-      ? 'py-2 md:py-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20' 
+  const navbarClasses = `fixed top-0 left-0 w-full z-30 transition-all duration-300 ${
+    scrolled
+      ? 'py-2 md:py-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20'
       : 'py-4 md:py-5 bg-transparent'
   }`;
 
   return (
     <nav className={navbarClasses} role="navigation" aria-label="Main navigation">
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-        {/* Logo */}
+
+        {/* LOGO (responsive: Kamal -> Kamal Kiran -> Kamal Kiran Polisetty) */}
         <Link
           to="hero"
           spy={true}
           smooth={true}
           offset={-70}
           duration={500}
-          className="flex items-center space-x-2 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-1"
-          aria-label="Go to top of page"
+          className="flex items-center space-x-2 cursor-pointer group focus:outline-none p-1"
         >
-          <motion.div
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 0.5 }}
+          <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }} />
+
+          <span
+            className="
+              font-bold bg-gradient-to-r from-blue-600 to-indigo-600 
+              dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent
+              text-lg md:text-xl
+            "
           >
-            <Code className="h-7 w-7 md:h-8 md:w-8 text-blue-600 dark:text-blue-400" />
-          </motion.div>
-          <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-            Kamal.dev
+            {/* Mobile/Small: Kamal */}
+            <span className="block md:hidden">Kamal</span>
+            {/* Medium: Kamal Kiran */}
+            <span className="hidden md:block xl:hidden">Kamal Kiran</span>
+            {/* Large Desktop: Full name */}
+            <span className="hidden xl:block">Kamal Kiran Polisetty</span>
           </span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center space-x-8">
+        {/* DESKTOP MENU - Reduced spacing */}
+        <div className="hidden lg:flex items-center space-x-2">
           {NAVIGATION_ITEMS.map((item) => (
             <Link
               key={item.name}
@@ -82,55 +88,66 @@ const Navbar = () => {
               smooth={true}
               offset={-70}
               duration={500}
-              className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium cursor-pointer py-2 group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+              className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium cursor-pointer py-2 group px-3"
               activeClass="text-blue-600 dark:text-blue-400"
             >
               {item.name}
-              <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 scale-x-0 group-hover:scale-x-100 origin-left"></span>
+              <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 scale-x-0 group-hover:scale-x-100 origin-left" />
             </Link>
           ))}
-          
-          <div className="flex items-center space-x-3 ml-6 pl-6 border-l border-gray-300 dark:border-gray-600">
-            <a 
+
+          {/* SOCIAL ICONS - Reduced spacing */}
+          <div className="flex items-center space-x-2 ml-3 pl-3 border-l border-gray-300 dark:border-gray-600">
+            <a
               href={APP_CONFIG.social.github}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => handleSocialClick('GitHub')}
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label="Visit GitHub profile"
+              className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
             >
               <Github className="h-5 w-5" />
             </a>
-            <a 
+
+            <a
               href={APP_CONFIG.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => handleSocialClick('LinkedIn')}
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label="Visit LinkedIn profile"
+              className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
             >
               <Linkedin className="h-5 w-5" />
+            </a>
+
+            <a
+              href={APP_CONFIG.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => handleSocialClick('Instagram')}
+              className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
+            >
+              <Instagram className="h-5 w-5" />
             </a>
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* MOBILE MENU BUTTON */}
         <button
           onClick={toggleMenu}
-          className="menu-button lg:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isMenuOpen}
+          className="menu-button lg:hidden p-2 rounded-lg transition-all 
+                     hover:bg-blue-100 dark:hover:bg-blue-900/30 
+                     hover:scale-105 active:scale-95"
         >
-          <motion.div
-            animate={{ rotate: isMenuOpen ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <motion.div animate={{ rotate: isMenuOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+            {isMenuOpen ? (
+              <X className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            ) : (
+              <Menu className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            )}
           </motion.div>
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -151,46 +168,34 @@ const Navbar = () => {
                   >
                     <Link
                       to={item.to}
-                      spy={true}
                       smooth={true}
                       offset={-70}
                       duration={500}
                       onClick={() => setIsMenuOpen(false)}
-                      className="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      activeClass="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                      className="block py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition font-medium"
                     >
                       {item.name}
                     </Link>
                   </motion.div>
                 ))}
-                
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="flex items-center justify-center space-x-4 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700"
-                >
-                  <a 
+
+                {/* MOBILE SOCIAL ICONS */}
+                <div className="flex items-center justify-center gap-4 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+                  <a
                     href={APP_CONFIG.social.github}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => handleSocialClick('GitHub')}
-                    className="p-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    aria-label="Visit GitHub profile"
+                    className="p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
                   >
                     <Github className="h-5 w-5" />
                   </a>
-                  <a 
+                  <a
                     href={APP_CONFIG.social.linkedin}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => handleSocialClick('LinkedIn')}
-                    className="p-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    aria-label="Visit LinkedIn profile"
+                    className="p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
                   >
                     <Linkedin className="h-5 w-5" />
                   </a>
-                </motion.div>
+                </div>
               </div>
             </div>
           </motion.div>

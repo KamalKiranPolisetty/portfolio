@@ -1,4 +1,5 @@
-import { Code, Heart, Github, Linkedin, Mail } from 'lucide-react';
+import { Code, Heart, Github, Linkedin, Mail, Instagram } from "lucide-react";
+import { APP_CONFIG } from "../config/constants";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,70 +10,122 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Code className="h-6 w-6 text-blue-400" />
-              <span className="text-xl font-bold text-white">Kamal.dev</span>
+              {/* <Code className="h-6 w-6 text-blue-400" /> */}
+              <span className="text-xl font-bold text-white">Kamal Kiran Polisetty</span>
             </div>
             <p className="text-sm text-gray-400 max-w-xs">
-              Building the web one line of code at a time. Full-stack developer specializing in modern web technologies.
+              Building the web one line of code at a time. Full-stack developer
+              specializing in modern web technologies.
             </p>
           </div>
-          
+
           <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#about" className="text-gray-400 hover:text-blue-400 transition-colors">About</a>
+                <a
+                  href="#about"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  About
+                </a>
               </li>
               <li>
-                <a href="#experience" className="text-gray-400 hover:text-blue-400 transition-colors">Experience</a>
+                <a
+                  href="#experience"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  Experience
+                </a>
               </li>
               <li>
-                <a href="#skills" className="text-gray-400 hover:text-blue-400 transition-colors">Skills</a>
+                <a
+                  href="#skills"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  Skills
+                </a>
               </li>
               <li>
-                <a href="#projects" className="text-gray-400 hover:text-blue-400 transition-colors">Projects</a>
+                <a
+                  href="#projects"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  Projects
+                </a>
               </li>
               <li>
-                <a href="#contact" className="text-gray-400 hover:text-blue-400 transition-colors">Contact</a>
+                <a
+                  href="#contact"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  Contact
+                </a>
               </li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Contact</h3>
             <ul className="space-y-3">
+              {/* Email */}
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-blue-400" />
-                <a href="mailto:kamalkiranpolisetty@gmail.com" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  kamalkiranpolisetty@gmail.com
+                <a
+                  href={`mailto:${APP_CONFIG.email}`}
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  {APP_CONFIG.email}
                 </a>
               </li>
+
+              {/* LinkedIn */}
               <li className="flex items-center space-x-3">
                 <Linkedin className="h-5 w-5 text-blue-400" />
-                <a 
-                  href="https://www.linkedin.com/in/kamalkiranpolisetty" 
+                <a
+                  href={APP_CONFIG.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors"
                 >
-                  /kamalkiranpolisetty
+                  {new URL(APP_CONFIG.social.linkedin).pathname}
                 </a>
               </li>
+
+              {/* GitHub */}
               <li className="flex items-center space-x-3">
                 <Github className="h-5 w-5 text-blue-400" />
-                <a 
-                  href="https://github.com/kamalkiranpolisetty" 
+                <a
+                  href={APP_CONFIG.social.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors"
                 >
-                  /kamalkiranpolisetty
+                  {new URL(APP_CONFIG.social.github).pathname}
+                </a>
+              </li>
+
+              {/* Instagram */}
+              <li className="flex items-center space-x-3">
+                <Instagram className="h-5 w-5 text-blue-400" />
+                <a
+                  href={APP_CONFIG.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  {`@${APP_CONFIG.social.instagram
+                    .split("/")
+                    .filter(Boolean)
+                    .pop()}`}
                 </a>
               </li>
             </ul>
           </div>
-          
-          <div>
+
+          {/* <div>
             <h3 className="text-lg font-semibold text-white mb-4">Subscribe</h3>
             <p className="text-sm text-gray-400 mb-4">
               Subscribe to my newsletter to receive updates on my latest projects and tech articles.
@@ -93,16 +146,17 @@ const Footer = () => {
                 Subscribe
               </button>
             </form>
-          </div>
+          </div> */}
         </div>
-        
+
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
             © {currentYear} Kamal Kiran Polisetty. All rights reserved.
           </p>
           <div className="flex items-center mt-4 md:mt-0">
             <span className="text-gray-500 text-sm flex items-center">
-              Made with <Heart className="h-4 w-4 text-red-500 mx-1" /> and React
+              Made with <Heart className="h-4 w-4 text-red-500 mx-1" /> and
+              React
             </span>
           </div>
         </div>

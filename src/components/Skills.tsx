@@ -19,11 +19,13 @@ const Skills = () => {
           >
             My <span className="text-blue-600 dark:text-blue-400">Skills</span>
           </motion.h2>
+
           <motion.div
             custom={1}
             variants={ANIMATION_VARIANTS.fadeIn}
             className="w-16 md:w-20 h-1 bg-blue-600 dark:bg-blue-400 mx-auto mb-6 md:mb-8"
           ></motion.div>
+
           <motion.p
             custom={2}
             variants={ANIMATION_VARIANTS.fadeIn}
@@ -43,11 +45,19 @@ const Skills = () => {
               viewport={{ once: true, margin: "-100px" }}
               custom={categoryIndex}
               variants={ANIMATION_VARIANTS.fadeIn}
-              className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 md:p-6 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow"
+              className="
+                bg-gray-50 dark:bg-gray-800 
+                rounded-xl p-4 md:p-6 
+                shadow-sm border border-gray-100 dark:border-gray-700 
+                transition-shadow 
+                hover:shadow-md hover:shadow-gray-300 
+                dark:hover:shadow-gray-600/40
+              "
             >
               <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 border-b border-gray-200 dark:border-gray-700 pb-2 text-gray-900 dark:text-gray-100">
                 {category.name}
               </h3>
+
               <div className="flex flex-wrap gap-2 md:gap-3">
                 {category.skills.map((skill, skillIndex) => (
                   <motion.span
@@ -98,6 +108,7 @@ const Skills = () => {
             </p>
           </div>
         </motion.div>
+
       </div>
     </section>
   );

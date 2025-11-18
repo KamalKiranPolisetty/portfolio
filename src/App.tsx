@@ -12,10 +12,12 @@ import LoadingScreen from './components/LoadingScreen';
 import ScrollToTop from './components/ScrollToTop';
 import ThemeToggle from './components/ThemeToggle';
 import CursorFollower from './components/CursorFollower';
+import Certifications from './components/Certifications';
 
 // Lazy load components for better performance
 const About = lazy(() => import('./components/About'));
 const Experience = lazy(() => import('./components/Experience'));
+const Education = lazy(()=>import('./components/Education'));
 const Projects = lazy(() => import('./components/Projects'));
 const Skills = lazy(() => import('./components/Skills'));
 const Contact = lazy(() => import('./components/Contact'));
@@ -131,10 +133,16 @@ function App() {
                         <Experience />
                       </Suspense>
                       <Suspense fallback={<SectionLoader />}>
+                        <Education />
+                      </Suspense>
+                      <Suspense fallback={<SectionLoader />}>
                         <Skills />
                       </Suspense>
                       <Suspense fallback={<SectionLoader />}>
                         <Projects />
+                      </Suspense>
+                      <Suspense fallback={<SectionLoader />}>
+                        <Certifications />
                       </Suspense>
                       <Suspense fallback={<SectionLoader />}>
                         <Contact />
