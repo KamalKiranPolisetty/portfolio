@@ -70,62 +70,60 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Contact</h3>
             <ul className="space-y-3">
-              {/* Email */}
-              <li className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-blue-400" />
-                <a
-                  href={`mailto:${APP_CONFIG.email}`}
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  {APP_CONFIG.email}
-                </a>
-              </li>
+  {/* Email */}
+  <li className="flex items-start space-x-3">
+    <Mail className="h-5 w-5 text-blue-400 mt-1" />
+    <a
+      href={`mailto:${APP_CONFIG.email}`}
+      className="text-gray-400 hover:text-blue-400 transition-colors"
+    >
+      {APP_CONFIG.email}
+    </a>
+  </li>
 
-              {/* LinkedIn */}
-              <li className="flex items-center space-x-3">
-                <Linkedin className="h-5 w-5 text-blue-400" />
-                <a
-                  href={APP_CONFIG.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  {new URL(APP_CONFIG.social.linkedin).pathname}
-                </a>
-              </li>
+  {/* LinkedIn */}
+  <li className="flex items-start space-x-3">
+    <Linkedin className="h-5 w-5 text-blue-400 mt-1" />
+    <a
+      href={APP_CONFIG.social.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-400 hover:text-blue-400 transition-colors"
+    >
+      {new URL(APP_CONFIG.social.linkedin).pathname}
+    </a>
+  </li>
 
-              {/* GitHub */}
-              <li className="flex items-center space-x-3">
-                <Github className="h-5 w-5 text-blue-400" />
-                <a
-                  href={APP_CONFIG.social.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  {new URL(APP_CONFIG.social.github).pathname}
-                </a>
-              </li>
+  {/* GitHub */}
+  <li className="flex items-start space-x-3">
+    <Github className="h-5 w-5 text-blue-400 mt-1" />
+    <a
+      href={APP_CONFIG.social.github}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-400 hover:text-blue-400 transition-colors"
+    >
+      {new URL(APP_CONFIG.social.github).pathname}
+    </a>
+  </li>
 
-              {/* Instagram */}
-              <li className="flex items-center space-x-3">
-                <Instagram className="h-5 w-5 text-blue-400" />
-                <a
-                  href={APP_CONFIG.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  {`@${APP_CONFIG.social.instagram
-                    .split("/")
-                    .filter(Boolean)
-                    .pop()}`}
-                </a>
-              </li>
-            </ul>
+  {/* Instagram */}
+  <li className="flex items-start space-x-3">
+    <Instagram className="h-5 w-5 text-blue-400 mt-1" />
+    <a
+      href={APP_CONFIG.social.instagram}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-400 hover:text-blue-400 transition-colors"
+    >
+      {`@${APP_CONFIG.social.instagram.split("/").filter(Boolean).pop()}`}
+    </a>
+  </li>
+</ul>
+
           </div>
 
-          {/* <div>
+          <div>
             <h3 className="text-lg font-semibold text-white mb-4">Subscribe</h3>
             <p className="text-sm text-gray-400 mb-4">
               Subscribe to my newsletter to receive updates on my latest projects and tech articles.
@@ -146,7 +144,7 @@ const Footer = () => {
                 Subscribe
               </button>
             </form>
-          </div> */}
+          </div>
         </div>
 
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">

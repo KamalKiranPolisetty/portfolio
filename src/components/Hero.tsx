@@ -11,40 +11,15 @@ import {
   Instagram,
 } from "lucide-react";
 import { Link } from "react-scroll";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { APP_CONFIG } from "../config/constants";
 import { trackResumeDownload, trackResumeView } from "../utils/analytics";
 
 const Hero = ({ theme }) => {
-  const [showPdfPopup, setShowPdfPopup] = useState(false);
-  const [pdfError, setPdfError] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  // ✅ Correct desktop detection (no touch, fine pointer)
-  useEffect(() => {
-    const detectDesktop = () => {
-      const desktop =
-        window.matchMedia("(hover: hover)").matches &&
-        window.matchMedia("(pointer: fine)").matches;
-
-      setIsDesktop(desktop);
-    };
-
-    detectDesktop();
-    window.addEventListener("resize", detectDesktop);
-    return () => window.removeEventListener("resize", detectDesktop);
-  }, []);
-
-  // VIEW Resume (Popup for desktop, redirect for others)
+  // VIEW Resume (always open in new tab)
   const handleResumeView = () => {
-    if (isDesktop) {
-      setShowPdfPopup(true);
-      setPdfError(false);
-      trackResumeView();
-    } else {
-      window.open(APP_CONFIG.resume.path, "_blank");
-      trackResumeView();
-    }
+    window.open(APP_CONFIG.resume.path, "_blank", "noopener");
+    trackResumeView();
   };
 
   // DOWNLOAD Resume
@@ -62,13 +37,6 @@ const Hero = ({ theme }) => {
       alert("Resume download not available. Please contact me directly.");
     }
   };
-
-  const handlePdfError = () => setPdfError(true);
-  const closePdfPopup = () => {
-    setShowPdfPopup(false);
-    setPdfError(false);
-  };
-  const openPdfInNewTab = () => window.open(APP_CONFIG.resume.path, "_blank");
 
   return (
     <>
@@ -103,7 +71,7 @@ const Hero = ({ theme }) => {
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-center">
             {/* TEXT LEFT SIDE */}
-            <div className="max-w-2xl mx-auto text-left order-1 xl:order-1 pl-4 md:pl-8 xl:pl-12">
+            <div className="max-w-2xl mx-auto text-left pl-4 md:pl-8 xl:pl-12">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -147,7 +115,7 @@ const Hero = ({ theme }) => {
                 </p>
               </motion.div>
 
-              {/* SOCIAL ICONS */}
+              {/* SOCIAL ICONS with your hover effects */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -159,10 +127,10 @@ const Hero = ({ theme }) => {
                     href={APP_CONFIG.social.github}
                     target="_blank"
                     className="w-10 h-10 rounded-full 
-                 bg-blue-900/10 dark:bg-blue-900/20 
-                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
-                 flex items-center justify-center 
-                 transition-all hover:shadow-md hover:scale-[1.05]"
+                    bg-blue-900/10 dark:bg-blue-900/20 
+                    hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                    flex items-center justify-center 
+                    transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Github className="w-5 h-5 text-blue-400" />
                   </a>
@@ -171,10 +139,10 @@ const Hero = ({ theme }) => {
                     href={APP_CONFIG.social.linkedin}
                     target="_blank"
                     className="w-10 h-10 rounded-full 
-                 bg-blue-900/10 dark:bg-blue-900/20 
-                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
-                 flex items-center justify-center 
-                 transition-all hover:shadow-md hover:scale-[1.05]"
+                    bg-blue-900/10 dark:bg-blue-900/20 
+                    hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                    flex items-center justify-center 
+                    transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Linkedin className="w-5 h-5 text-blue-400" />
                   </a>
@@ -183,10 +151,10 @@ const Hero = ({ theme }) => {
                     href={APP_CONFIG.social.instagram}
                     target="_blank"
                     className="w-10 h-10 rounded-full 
-                 bg-blue-900/10 dark:bg-blue-900/20 
-                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
-                 flex items-center justify-center 
-                 transition-all hover:shadow-md hover:scale-[1.05]"
+                    bg-blue-900/10 dark:bg-blue-900/20 
+                    hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                    flex items-center justify-center 
+                    transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Instagram className="w-5 h-5 text-blue-400" />
                   </a>
@@ -194,10 +162,10 @@ const Hero = ({ theme }) => {
                   <a
                     href={`mailto:${APP_CONFIG.email}`}
                     className="w-10 h-10 rounded-full 
-                 bg-blue-900/10 dark:bg-blue-900/20 
-                 hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
-                 flex items-center justify-center 
-                 transition-all hover:shadow-md hover:scale-[1.05]"
+                    bg-blue-900/10 dark:bg-blue-900/20 
+                    hover:bg-blue-800/10 dark:hover:bg-blue-800/30 
+                    flex items-center justify-center 
+                    transition-all hover:shadow-md hover:scale-[1.05]"
                   >
                     <Mail className="w-5 h-5 text-blue-400" />
                   </a>
@@ -211,19 +179,37 @@ const Hero = ({ theme }) => {
                 transition={{ duration: 0.45, delay: 0.45 }}
                 className="flex flex-wrap gap-4"
               >
+                {/* VIEW */}
                 <button
                   onClick={handleResumeView}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-md shadow transition-all"
+                  className="px-6 py-2 border-2 border-blue-500 text-blue-500 
+  rounded-md hover:bg-blue-500 hover:text-white 
+  transition-all font-medium flex items-center gap-2"
                 >
-                  Resume
+                  View Resume
+                  <ExternalLink className="w-4 h-4" />
                 </button>
 
+                {/* DOWNLOAD */}
+                <button
+                  onClick={handleResumeDownload}
+                  className="px-6 py-2 border-2 border-blue-500 text-blue-500 
+    rounded-md hover:bg-blue-500 hover:text-white 
+    transition-all font-medium flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Download
+                </button>
+
+                {/* CONTACT BUTTON */}
                 <Link
                   to="contact"
                   smooth={true}
                   duration={500}
                   offset={-70}
-                  className="px-6 py-2 border-2 border-blue-500 text-blue-400 rounded-md hover:bg-blue-500 hover:text-white transition-all cursor-pointer flex items-center gap-2"
+                  className="px-6 py-2 border-2 border-blue-500 text-blue-500 
+                  rounded-md hover:bg-blue-500 hover:text-white 
+                  transition-all font-medium flex items-center gap-2"
                 >
                   <Mail className="w-4 h-4" />
                   Let's Connect
@@ -237,7 +223,9 @@ const Hero = ({ theme }) => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="w-[260px] sm:w-[300px] md:w-[340px] lg:w-[360px] xl:w-[380px] rounded-2xl overflow-hidden shadow-2xl dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                className="w-[260px] sm:w-[300px] md:w-[340px] lg:w-[360px] xl:w-[380px] 
+                rounded-2xl overflow-hidden shadow-2xl 
+                dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]"
               >
                 <img
                   src="/me.jpeg"
@@ -249,65 +237,6 @@ const Hero = ({ theme }) => {
           </div>
         </div>
       </section>
-
-      {/* DESKTOP POPUP ONLY */}
-      {isDesktop && showPdfPopup && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 md:p-6"
-          onClick={closePdfPopup}
-        >
-          <motion.div
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="relative bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* HEADER */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                  <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
-                  {APP_CONFIG.name} - Resume
-                </h3>
-              </div>
-
-              <button
-                onClick={closePdfPopup}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
-              >
-                <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-              </button>
-            </div>
-
-            {/* PDF VIEWER */}
-            <div className="flex-1 p-4">
-              {!pdfError ? (
-                <iframe
-                  src={`${APP_CONFIG.resume.path}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
-                  className="w-full h-full border-0 rounded-lg"
-                  title="Resume Viewer"
-                  onError={handlePdfError}
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full">
-                  <AlertCircle className="h-14 w-14 text-orange-500 mb-4" />
-                  <p className="text-gray-300">PDF preview unavailable.</p>
-                </div>
-              )}
-            </div>
-
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700 text-gray-400 text-xs md:text-sm text-center">
-              Last updated: {new Date().toLocaleDateString()}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
     </>
   );
 };

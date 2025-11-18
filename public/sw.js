@@ -1,8 +1,8 @@
 // -------------------------------------------------------------
 // ⚡ Service Worker — Safe Caching & Offline Support
 // -------------------------------------------------------------
-const STATIC_CACHE = "static-v1";
-const DYNAMIC_CACHE = "dynamic-v1";
+const STATIC_CACHE = "static-v2"; // <-- bump version to force refresh
+const DYNAMIC_CACHE = "dynamic-v2";
 
 // Assets to cache immediately (critical app shell)
 const STATIC_ASSETS = [
@@ -10,11 +10,10 @@ const STATIC_ASSETS = [
   "/index.html",
   "/manifest.json",
   "/logo.svg",
-  "/kkp.pdf",
 ];
 
 // -------------------------------------------------------------
-// 🧱 INSTALL — Precache essential assets
+// 🧱 INSTALL — Precache essential static assets
 // -------------------------------------------------------------
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -45,6 +44,13 @@ self.addEventListener("activate", (event) => {
 });
 
 // -------------------------------------------------------------
+// 🚫 PDF BYPASS — Let PDFs load normally (fixes resume issue)
+// -------------------------------------------------------------
+function isPDFRequest(request) {
+  return request.url.endsWith(".pdf");
+}
+
+// -------------------------------------------------------------
 // 🚦 shouldCache — Skip problematic URLs (chrome-extension, data, etc.)
 // -------------------------------------------------------------
 function shouldCache(url) {
@@ -57,7 +63,7 @@ function shouldCache(url) {
     return false;
   }
 
-  // Skip logos or third-party trackers
+  // Skip trackers/logos
   if (url.includes("logo.clearbit.com") || url.includes("google-analytics")) {
     return false;
   }
@@ -66,23 +72,27 @@ function shouldCache(url) {
 }
 
 // -------------------------------------------------------------
-// ⚙️ FETCH — Main caching strategy
+// ⚙️ FETCH — Smart caching strategy
 // -------------------------------------------------------------
 self.addEventListener("fetch", (event) => {
   const { request } = event;
-  const url = request.url;
 
-  // Skip unsupported or unsafe caching
-  if (!shouldCache(url)) return;
+  // ❌ DO NOT CACHE PDFs → fixes opening homepage issue
+  if (isPDFRequest(request)) {
+    return; // let browser handle normally
+  }
+
+  // ❌ Skip caching unsafe URLs
+  if (!shouldCache(request.url)) return;
 
   let parsedUrl;
   try {
-    parsedUrl = new URL(url);
+    parsedUrl = new URL(request.url);
   } catch {
     return;
   }
 
-  // 🏠 Handle navigation requests (SPA routing)
+  // 🏠 SPA Routing (HTML navigation)
   if (request.mode === "navigate") {
     event.respondWith(
       caches.match("/index.html").then((cached) => {
@@ -103,14 +113,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 🔌 Handle API calls
+  // 🔌 API Requests
   if (parsedUrl.pathname.startsWith("/api/")) {
     event.respondWith(
       fetch(request)
         .then((res) => {
           if (res && res.status === 200) {
-            const clone = res.clone();
-            caches.open(DYNAMIC_CACHE).then((cache) => cache.put(request, clone));
+            caches.open(DYNAMIC_CACHE).then((cache) => cache.put(request, res.clone()));
           }
           return res;
         })
@@ -119,19 +128,19 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 🎨 Handle static and dynamic assets
+  // 🎨 Static assets, images, scripts, etc.
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
 
       return fetch(request)
         .then((response) => {
-          // Skip failed or non-basic responses
+          // Skip non-basic / opaque / unsuccessful responses
           if (!response || response.status !== 200 || response.type !== "basic") {
             return response;
           }
 
-          // ✅ MIME-SAFE FILTER — Only cache text-based content
+          // Cache only text-based assets (avoid PDF caching)
           const contentType = response.headers.get("content-type") || "";
           const isTextAsset =
             contentType.includes("text") ||
@@ -141,59 +150,40 @@ self.addEventListener("fetch", (event) => {
             contentType.includes("svg") ||
             contentType.includes("html");
 
-          if (!isTextAsset) {
-            // Don’t cache binary (images, fonts, PDFs, etc.)
-            return response;
-          }
+          if (!isTextAsset) return response;
 
-          // Safe to cache
+          // Cache safely
           const clone = response.clone();
-          caches.open(DYNAMIC_CACHE).then((cache) => {
-            cache.put(request, clone);
-          });
+          caches.open(DYNAMIC_CACHE).then((cache) => cache.put(request, clone));
 
           return response;
         })
-        .catch((error) => {
-          console.warn("Fetch failed for:", request.url, error);
-          return new Response("Network error", {
-            status: 408,
-            headers: { "Content-Type": "text/plain" },
-          });
-        });
+        .catch(() => new Response("Network error", { status: 408 }));
     })
   );
 });
 
 // -------------------------------------------------------------
-// 🔁 Background Sync (future-ready)
+// 🔁 Background Sync Placeholder
 // -------------------------------------------------------------
 self.addEventListener("sync", (event) => {
   if (event.tag === "contact-form") {
-    event.waitUntil(handleOfflineFormSubmissions());
+    event.waitUntil(Promise.resolve());
   }
 });
 
 // -------------------------------------------------------------
-// 🔔 Push Notifications (optional future use)
+// 🔔 Push Notifications Placeholder
 // -------------------------------------------------------------
 self.addEventListener("push", (event) => {
   if (event.data) {
     const data = event.data.json();
-    const options = {
-      body: data.body,
-      icon: "/logo.svg",
-      badge: "/logo.svg",
-      vibrate: [100, 50, 100],
-      data: { dateOfArrival: Date.now(), primaryKey: data.primaryKey },
-    };
-    event.waitUntil(self.registration.showNotification(data.title, options));
+    event.waitUntil(
+      self.registration.showNotification(data.title, {
+        body: data.body,
+        icon: "/logo.svg",
+        badge: "/logo.svg",
+      })
+    );
   }
 });
-
-// -------------------------------------------------------------
-// 📨 Offline Form Submission Placeholder
-// -------------------------------------------------------------
-async function handleOfflineFormSubmissions() {
-  console.log("Handling offline form submissions...");
-}
