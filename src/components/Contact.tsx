@@ -228,43 +228,63 @@ const Contact = () => {
               </h3>
 
               <div className="flex justify-start w-full gap-3 md:gap-4">
-  {/* GitHub */}
-  <a
-    href={APP_CONFIG.social.github}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="p-2 md:p-3 bg-gray-100 dark:bg-gray-800 rounded-full 
+                {/* GitHub */}
+                <a
+                  href={APP_CONFIG.social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleSocialClick("GitHub")}
+                  className="p-2 md:p-3 
+               bg-gray-100 dark:bg-gray-800 
+               text-blue-600 dark:text-blue-400 
+               rounded-full 
                hover:bg-blue-100 dark:hover:bg-blue-900/30 
-               transition-all cursor-pointer flex items-center justify-center"
-  >
-    <Github className="h-4 w-4 md:h-5 md:w-5" />
-  </a>
+               hover:text-blue-600 dark:hover:text-blue-400
+               transition-all cursor-pointer 
+               flex items-center justify-center 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <Github className="h-4 w-4 md:h-5 md:w-5 pointer-events-none" />
+                </a>
 
-  {/* LinkedIn */}
-  <a
-    href={APP_CONFIG.social.linkedin}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="p-2 md:p-3 bg-gray-100 dark:bg-gray-800 rounded-full 
+                {/* LinkedIn */}
+                <a
+                  href={APP_CONFIG.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleSocialClick("LinkedIn")}
+                  className="p-2 md:p-3 
+               bg-gray-100 dark:bg-gray-800 
+               text-blue-600 dark:text-blue-400
+               rounded-full 
                hover:bg-blue-100 dark:hover:bg-blue-900/30 
-               transition-all cursor-pointer flex items-center justify-center"
-  >
-    <Linkedin className="h-4 w-4 md:h-5 md:w-5" />
-  </a>
+               hover:text-blue-600 dark:hover:text-blue-400
+               transition-all cursor-pointer 
+               flex items-center justify-center 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <Linkedin className="h-4 w-4 md:h-5 md:w-5 pointer-events-none" />
+                </a>
 
-  {/* Instagram */}
-  <a
-    href={APP_CONFIG.social.instagram}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="p-2 md:p-3 bg-gray-100 dark:bg-gray-800 rounded-full 
+                {/* Instagram */}
+                <a
+                  href={APP_CONFIG.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleSocialClick("Instagram")}
+                  className="p-2 md:p-3 
+               bg-gray-100 dark:bg-gray-800 
+               text-blue-600 dark:text-blue-400
+               rounded-full 
                hover:bg-blue-100 dark:hover:bg-blue-900/30 
-               transition-all cursor-pointer flex items-center justify-center"
-  >
-    <Instagram className="h-4 w-4 md:h-5 md:w-5" />
-  </a>
-</div>
-
+               hover:text-blue-600 dark:hover:text-blue-400
+               transition-all cursor-pointer 
+               flex items-center justify-center 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <Instagram className="h-4 w-4 md:h-5 md:w-5 pointer-events-none" />
+                </a>
+              </div>
             </motion.div>
           </motion.div>
 

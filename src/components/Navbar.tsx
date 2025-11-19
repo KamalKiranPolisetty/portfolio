@@ -73,7 +73,7 @@ const Navbar = () => {
             "
           >
             {/* Mobile/Small: Kamal */}
-            <span className="block md:hidden">Kamal</span>
+            <span className="block md:hidden">Kamal Kiran Polisetty</span>
             {/* Medium: Kamal Kiran */}
             <span className="hidden md:block xl:hidden">Kamal Kiran</span>
             {/* Large Desktop: Full name */}
