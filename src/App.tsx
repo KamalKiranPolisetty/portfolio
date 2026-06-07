@@ -29,11 +29,17 @@ import {
   Sun,
   X,
 } from "lucide-react";
+import emailjs from "@emailjs/browser";
 import { projects } from "./data/projects";
 import { experiences } from "./data/experience";
 import { skillCategories } from "./data/skills";
 import { education } from "./data/education";
 import { certifications } from "./data/certifications";
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
+const EMAILJS_TEMPLATE_NOTIFY = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_NOTIFY as string;
+const EMAILJS_TEMPLATE_REPLY = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_AUTO_REPLY as string;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 type Route = "/" | "/work" | "/about" | "/contact" | "/404";
 type Theme = "light" | "dark";
@@ -766,7 +772,19 @@ function AboutPage({ navigate }: { navigate: (route: Route) => void }) {
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(false);
   const [errors, setErrors] = useState<ContactErrors>({});
+  const [formKey, setFormKey] = useState(0);
+
+  useEffect(() => {
+    if (!sent) return;
+    const timer = setTimeout(() => {
+      setSent(false);
+      setFormKey((k) => k + 1);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, [sent]);
 
   const validate = (data: FormData) => {
     const nextErrors: ContactErrors = {};
@@ -800,7 +818,7 @@ function ContactPage() {
     });
   };
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const nextErrors = validate(data);
@@ -816,12 +834,42 @@ function ContactPage() {
     }
 
     setErrors({});
-    const subject = encodeURIComponent(String(data.get("subject") || "Portfolio inquiry"));
-    const body = encodeURIComponent(
-      `Hi Kamal,\n\n${String(data.get("message") || "")}\n\nFrom: ${String(data.get("name") || "")}\nEmail: ${String(data.get("email") || "")}`,
-    );
-    setSent(true);
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+    setSending(true);
+    setSendError(false);
+
+    const senderName = String(data.get("name") || "");
+    const senderEmail = String(data.get("email") || "");
+    const subject = String(data.get("subject") || "Portfolio inquiry");
+    const message = String(data.get("message") || "");
+
+    const notifyParams = {
+      from_name: senderName,
+      from_email: senderEmail,
+      subject,
+      message,
+      to_name: "Kamal Kiran Polisetty",
+      to_email: profile.email,
+    };
+
+    const replyParams = {
+      to_name: senderName,
+      to_email: senderEmail,
+      from_name: "Kamal Kiran Polisetty",
+      subject,
+      message,
+    };
+
+    try {
+      await Promise.all([
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_NOTIFY, notifyParams, EMAILJS_PUBLIC_KEY),
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_REPLY, replyParams, EMAILJS_PUBLIC_KEY),
+      ]);
+      setSent(true);
+    } catch {
+      setSendError(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -860,88 +908,144 @@ function ContactPage() {
           </div>
         </div>
 
-        <motion.form
-          className="contact-form"
-          onSubmit={submit}
-          noValidate
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2, duration: 0.65 }}
-        >
-          <div className="form-row">
-            <label className={errors.name ? "field-error" : ""}>
-              Your name
-              <input
-                name="name"
-                type="text"
-                autoComplete="name"
-                placeholder="Jane Smith"
-                aria-invalid={Boolean(errors.name)}
-                aria-describedby={errors.name ? "name-error" : undefined}
-                onChange={() => clearError("name")}
-              />
-              {errors.name && (
-                <span className="validation-message" id="name-error">
-                  <AlertCircle size={14} /> {errors.name}
-                </span>
+        <AnimatePresence mode="wait">
+          {sent ? (
+            <motion.div
+              key="success"
+              className="contact-form contact-success"
+              initial={{ opacity: 0, scale: 0.96, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: -16 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="success-icon">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <motion.circle
+                    cx="32" cy="32" r="30"
+                    stroke="var(--accent)"
+                    strokeWidth="2.5"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                  />
+                  <motion.path
+                    d="M20 33l9 9 15-16"
+                    stroke="var(--accent)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.4, delay: 0.55, ease: "easeOut" }}
+                  />
+                </svg>
+              </div>
+              <p className="eyebrow">Message received</p>
+              <h2 className="success-heading">You're in my inbox.</h2>
+              <p className="success-body">
+                I read every message personally and will get back to you soon. Talk soon.
+              </p>
+              <div className="success-progress">
+                <motion.div
+                  className="success-progress-bar"
+                  initial={{ scaleX: 1 }}
+                  animate={{ scaleX: 0 }}
+                  transition={{ duration: 4.5, ease: "linear" }}
+                />
+              </div>
+              <p className="success-reset-hint">Form resets automatically</p>
+            </motion.div>
+          ) : (
+            <motion.form
+              key={formKey}
+              className="contact-form"
+              onSubmit={submit}
+              noValidate
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ delay: 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="form-row">
+                <label className={errors.name ? "field-error" : ""}>
+                  Your name
+                  <input
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Jane Smith"
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                    onChange={() => clearError("name")}
+                  />
+                  {errors.name && (
+                    <span className="validation-message" id="name-error">
+                      <AlertCircle size={14} /> {errors.name}
+                    </span>
+                  )}
+                </label>
+                <label className={errors.email ? "field-error" : ""}>
+                  Email address
+                  <input
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="jane@company.com"
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    onChange={() => clearError("email")}
+                  />
+                  {errors.email && (
+                    <span className="validation-message" id="email-error">
+                      <AlertCircle size={14} /> {errors.email}
+                    </span>
+                  )}
+                </label>
+              </div>
+              <label className={errors.subject ? "field-error" : ""}>
+                What are you working on?
+                <input
+                  name="subject"
+                  type="text"
+                  placeholder="A product, platform, or ambitious idea"
+                  aria-invalid={Boolean(errors.subject)}
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
+                  onChange={() => clearError("subject")}
+                />
+                {errors.subject && (
+                  <span className="validation-message" id="subject-error">
+                    <AlertCircle size={14} /> {errors.subject}
+                  </span>
+                )}
+              </label>
+              <label className={errors.message ? "field-error" : ""}>
+                Give me the useful context
+                <textarea
+                  name="message"
+                  rows={7}
+                  placeholder="The problem, the goal, and where I can help..."
+                  aria-invalid={Boolean(errors.message)}
+                  aria-describedby={errors.message ? "message-error" : undefined}
+                  onChange={() => clearError("message")}
+                />
+                {errors.message && (
+                  <span className="validation-message" id="message-error">
+                    <AlertCircle size={14} /> {errors.message}
+                  </span>
+                )}
+              </label>
+              <button className="button button-primary" type="submit" disabled={sending}>
+                {sending ? null : <ArrowUpRight size={18} />}
+                {sending ? "Sending…" : "Send message"}
+              </button>
+              {sendError && (
+                <small style={{ color: "var(--color-error, red)" }}>
+                  Something went wrong. Please try again or email me directly.
+                </small>
               )}
-            </label>
-            <label className={errors.email ? "field-error" : ""}>
-              Email address
-              <input
-                name="email"
-                type="email"
-                autoComplete="email"
-                placeholder="jane@company.com"
-                aria-invalid={Boolean(errors.email)}
-                aria-describedby={errors.email ? "email-error" : undefined}
-                onChange={() => clearError("email")}
-              />
-              {errors.email && (
-                <span className="validation-message" id="email-error">
-                  <AlertCircle size={14} /> {errors.email}
-                </span>
-              )}
-            </label>
-          </div>
-          <label className={errors.subject ? "field-error" : ""}>
-            What are you working on?
-            <input
-              name="subject"
-              type="text"
-              placeholder="A product, platform, or ambitious idea"
-              aria-invalid={Boolean(errors.subject)}
-              aria-describedby={errors.subject ? "subject-error" : undefined}
-              onChange={() => clearError("subject")}
-            />
-            {errors.subject && (
-              <span className="validation-message" id="subject-error">
-                <AlertCircle size={14} /> {errors.subject}
-              </span>
-            )}
-          </label>
-          <label className={errors.message ? "field-error" : ""}>
-            Give me the useful context
-            <textarea
-              name="message"
-              rows={7}
-              placeholder="The problem, the goal, and where I can help..."
-              aria-invalid={Boolean(errors.message)}
-              aria-describedby={errors.message ? "message-error" : undefined}
-              onChange={() => clearError("message")}
-            />
-            {errors.message && (
-              <span className="validation-message" id="message-error">
-                <AlertCircle size={14} /> {errors.message}
-              </span>
-            )}
-          </label>
-          <button className="button button-primary" type="submit">
-            {sent ? <Check size={18} /> : <ArrowUpRight size={18} />}
-            {sent ? "Opening your email app" : "Send project brief"}
-          </button>
-          <small>No forms disappearing into a CRM. This opens your email app.</small>
-        </motion.form>
+            </motion.form>
+          )}
+        </AnimatePresence>
       </section>
     </motion.main>
   );
