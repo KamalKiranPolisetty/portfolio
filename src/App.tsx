@@ -496,8 +496,8 @@ function HomePage({ navigate }: { navigate: (route: Route) => void }) {
           software that is <em>useful, resilient, and clear.</em>
         </motion.p>
         <RouteLink to="/about" navigate={navigate} className="circle-link">
-          My story
-          <ArrowUpRight size={20} />
+          <ArrowUpRight size={28} className="circle-link-arrow" />
+          <span>My story</span>
         </RouteLink>
       </section>
     </motion.main>
