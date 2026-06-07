@@ -2,62 +2,37 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Kamal Kiran Polisetty - Full Stack Developer Portfolio">
-    <meta name="keywords" content="Kamal Kiran Polisetty, full stack, developer, portfolio, React, Node.js">
+    <meta name="description" content="Kamal Kiran Polisetty is a full-stack engineer building scalable products across web, AI, data, and cloud.">
+    <meta name="keywords" content="Kamal Kiran Polisetty, full stack engineer, React, Java, Spring Boot, AI systems">
     <meta name="author" content="Kamal Kiran Polisetty">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kamalkiranpolisetty.com/">
+    <meta property="og:title" content="Kamal Kiran Polisetty — Full Stack / AI Engineer">
+    <meta property="og:description" content="Full-stack engineer building scalable products across web, AI, data, and cloud. Complex underneath. Clear where it matters.">
+    <meta property="og:image" content="https://kamalkiranpolisetty.com/kamal-portrait.jpeg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kamal Kiran Polisetty — Full Stack / AI Engineer">
+    <meta name="twitter:description" content="Full-stack engineer building scalable products across web, AI, data, and cloud.">
+    <meta name="twitter:image" content="https://kamalkiranpolisetty.com/kamal-portrait.jpeg">
+
+    <link rel="canonical" href="https://kamalkiranpolisetty.com/">
+    <link rel="icon" type="image/svg+xml" id="favicon" href="/favicon-dark.svg" />
+    <link rel="apple-touch-icon" id="favicon-apple" href="/favicon-dark.svg" />
     <title>Kamal Kiran Polisetty</title>
-    
-    <!-- Preconnect to external domains -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://images.pexels.com">
-    
-    <!-- Optimized font loading -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Preload critical resources -->
-    <!-- TypeScript files (.tsx) can't be directly loaded in browsers — they need to be compiled to JavaScript first -->
-    <!-- <link rel="modulepreload" href="/src/main.tsx"> -->
-    
-    <!-- Performance hints -->
-    <meta name="theme-color" content="#3b82f6">
+
+    <meta name="theme-color" content="#0c0c0c">
     <meta name="color-scheme" content="light dark">
-    
-    <!-- Critical CSS inline (if needed) -->
     <style>
-      /* Critical above-the-fold styles */
-      body { 
-        margin: 0; 
-        font-family: 'Inter', sans-serif; 
-        background-color: #fafafa;
-        color: #111827;
-      }
-      .dark body { 
-        background-color: #111827; 
-        color: #f9fafb; 
-      }
-      /* Loading state */
-      #root:empty::after {
-        content: '';
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 32px;
-        height: 32px;
-        margin: -16px 0 0 -16px;
-        border: 2px solid #3b82f6;
-        border-top-color: transparent;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
+      html, body { margin: 0; background: #0c0c0c; }
     </style>
   </head>
-  <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

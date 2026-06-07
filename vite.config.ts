@@ -28,10 +28,7 @@ export default defineConfig({
       'react',
       'react-dom',
       'framer-motion',
-      'lucide-react',
-      'react-scroll',
-      'react-type-animation',
-      'emailjs-com'
+      'lucide-react'
     ],
     exclude: []
   },
@@ -57,9 +54,8 @@ export default defineConfig({
         manualChunks: {
           // Vendor chunks
           'react-vendor': ['react', 'react-dom'],
-          'animation-vendor': ['framer-motion', 'react-type-animation'],
-          'ui-vendor': ['lucide-react', 'react-scroll'],
-          'email-vendor': ['emailjs-com'],
+          'animation-vendor': ['framer-motion'],
+          'ui-vendor': ['lucide-react'],
         },
         
         // Simplified asset naming
