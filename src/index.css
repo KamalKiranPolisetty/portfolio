@@ -1078,6 +1078,45 @@ a {
   color: var(--accent);
 }
 
+.not-found-page {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+}
+
+.not-found-inner {
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+
+.not-found-inner h1 {
+  max-width: 900px;
+  margin: 16px 0 0;
+  font-size: clamp(4rem, 10vw, 9.5rem);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 0.88;
+}
+
+.not-found-inner h1 span {
+  display: block;
+}
+
+.not-found-inner > p:not(.eyebrow) {
+  max-width: 460px;
+  margin: 32px 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+
 .work-cta,
 .about-cta {
   display: flex;

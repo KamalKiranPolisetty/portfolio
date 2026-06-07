@@ -35,7 +35,7 @@ import { skillCategories } from "./data/skills";
 import { education } from "./data/education";
 import { certifications } from "./data/certifications";
 
-type Route = "/" | "/work" | "/about" | "/contact";
+type Route = "/" | "/work" | "/about" | "/contact" | "/404";
 type Theme = "light" | "dark";
 type ContactField = "name" | "email" | "subject" | "message";
 type ContactErrors = Partial<Record<ContactField, string>>;
@@ -84,7 +84,7 @@ function normalizePath(pathname: string): Route {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
   return routes.some((route) => route.path === cleanPath)
     ? (cleanPath as Route)
-    : "/";
+    : "/404";
 }
 
 function useRoute() {
@@ -964,6 +964,55 @@ function Footer({ navigate }: { navigate: (route: Route) => void }) {
   );
 }
 
+function NotFoundPage({ navigate }: { navigate: (route: Route) => void }) {
+  return (
+    <motion.main
+      className="page not-found-page"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
+      <div className="not-found-inner section-shell">
+        <motion.p className="eyebrow" variants={reveal} initial="hidden" animate="visible">
+          Error · 404
+        </motion.p>
+        <motion.h1
+          variants={reveal}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.08 }}
+        >
+          <span>Page not</span>
+          <span className="outline-text">found.</span>
+        </motion.h1>
+        <motion.p
+          variants={reveal}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.15 }}
+        >
+          This URL doesn't exist or was moved somewhere else.
+        </motion.p>
+        <motion.div
+          variants={reveal}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.22 }}
+          className="not-found-actions"
+        >
+          <button className="button button-primary" onClick={() => navigate("/")}>
+            Go home <ArrowRight size={18} />
+          </button>
+          <button className="button button-ghost" onClick={() => navigate("/work")}>
+            View work <ArrowRight size={18} />
+          </button>
+        </motion.div>
+      </div>
+    </motion.main>
+  );
+}
+
 function App() {
   const { route, navigate } = useRoute();
   const [theme, setTheme] = useState<Theme>(() => {
@@ -986,7 +1035,14 @@ function App() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-    document.title = `${route === "/" ? "Kamal Kiran Polisetty" : `${route.slice(1)} · Kamal Kiran Polisetty`}`;
+    const titles: Record<Route, string> = {
+      "/": "Kamal Kiran Polisetty",
+      "/work": "Work · Kamal Kiran Polisetty",
+      "/about": "About · Kamal Kiran Polisetty",
+      "/contact": "Contact · Kamal Kiran Polisetty",
+      "/404": "404 · Kamal Kiran Polisetty",
+    };
+    document.title = titles[route] ?? "Kamal Kiran Polisetty";
   }, [route]);
 
   return (
@@ -1004,8 +1060,9 @@ function App() {
         {route === "/work" && <WorkPage key="work" navigate={navigate} />}
         {route === "/about" && <AboutPage key="about" navigate={navigate} />}
         {route === "/contact" && <ContactPage key="contact" />}
+        {route === "/404" && <NotFoundPage key="404" navigate={navigate} />}
       </AnimatePresence>
-      <Footer navigate={navigate} />
+      {route !== "/404" && <Footer navigate={navigate} />}
     </div>
   );
 }
