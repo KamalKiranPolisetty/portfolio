@@ -874,6 +874,7 @@ function ContactPage() {
               <input
                 name="name"
                 type="text"
+                autoComplete="name"
                 placeholder="Jane Smith"
                 aria-invalid={Boolean(errors.name)}
                 aria-describedby={errors.name ? "name-error" : undefined}
@@ -890,6 +891,7 @@ function ContactPage() {
               <input
                 name="email"
                 type="email"
+                autoComplete="email"
                 placeholder="jane@company.com"
                 aria-invalid={Boolean(errors.email)}
                 aria-describedby={errors.email ? "email-error" : undefined}

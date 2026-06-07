@@ -1723,9 +1723,6 @@ a {
     opacity: 0.84;
   }
 
-  .stage-label {
-    display: none;
-  }
 
   .hero-meta {
     right: 20px;
@@ -1872,9 +1869,6 @@ a {
     align-self: center;
   }
 
-  .stage-label {
-    display: none;
-  }
 }
 
 @media (max-width: 620px) {
