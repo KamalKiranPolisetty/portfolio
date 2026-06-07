@@ -400,7 +400,7 @@ function HomePage({ navigate }: { navigate: (route: Route) => void }) {
               <span className="id-card-brand" aria-label="KonfigAI" />
               <div className="id-card-meta">
                 <span>KonfigAI</span>
-                <span>2026 · NO. 001</span>
+                <span>Present</span>
               </div>
             </div>
             <div className="id-card-photo">
