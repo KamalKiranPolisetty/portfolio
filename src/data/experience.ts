@@ -5,59 +5,68 @@ export const experiences: Experience[] = [
   {
     id: 1,
     type: "work",
+    title: "Software Engineer Intern",
+    company: "KonfigAI",
+    date: "Aug 2025 – Present",
+    location: "Charlotte, USA",
+    description: [
+      "Led backend development for Java Spring Boot microservices, contributing to Spring Boot 4 migration, Gradle upgrades, and dependency alignment across nine services.",
+      "Optimized MongoDB-backed REST APIs by resolving complex aggregation and projection issues, improving query efficiency and reducing runtime errors.",
+      "Improved startup and runtime performance using lazy initialization, Spring Context Indexer, Jackson Blackbird, JDK 21 JVM tuning, and connection optimization, achieving 15–20% faster startup times.",
+      "Resolved production-critical issues and security findings across DAST and SAST vulnerabilities, PDF generation, XML parsing, and data formatting."
+    ],
+    technologies: [
+      "Java", "Spring Boot 4", "MongoDB", "REST APIs",
+      "Gradle", "JDK 21", "Microservices", "DAST", "SAST"
+    ]
+  },
+  {
+    id: 2,
+    type: "work",
     title: "Associate Software Engineer",
     company: "Capgemini",
     date: "Jun 2022 – Jul 2023",
     location: "Bangalore, India",
     description: [
-      "Developed and optimized internal management system for Nokia using Spring Boot, Angular, and MySQL.",
-      "Implemented JWT authentication and role-based authorization improving security and API integrity.",
-      "Optimized backend APIs using caching, pagination, and lazy loading resulting in 35% faster response times.",
-      "Built Angular components for dashboards and real-time visualization integrated with Spring Boot APIs.",
-      "Contributed to CI/CD using Git, Maven, Docker, Jenkins enabling rapid automated deployments.",
-      "Collaborated in Agile sprints improving delivery speed and code quality by 25%."
+      "Developed and maintained backend services using Java, Spring Boot, and Hibernate, implementing JWT authentication and role-based authorization to secure APIs.",
+      "Built and maintained React components for dashboards, forms, and real-time data views, integrating APIs and improving responsiveness through optimized state management and component reuse.",
+      "Optimized API and application performance with caching, query optimization, and database indexing, reducing average response times by 35%.",
+      "Managed CI/CD workflows with Git, Maven, and Docker while contributing to Agile sprints, reducing integration bugs by 25%."
     ],
     technologies: [
       "Java", "Spring Boot", "Spring MVC", "Hibernate",
       "Spring Security", "JWT", "REST APIs",
-      "MySQL", "MongoDB", "Angular",
-      "Docker", "Jenkins", "Git"
+      "React", "Docker", "Maven", "Git"
     ]
   },
   {
-    id: 2,
+    id: 3,
     type: "work",
     title: "Software Intern",
     company: "Capgemini",
     date: "Feb 2022 – Apr 2022",
     location: "Bangalore, India",
     description: [
-      "Created Java-based integration workflows and REST APIs.",
-      "Developed MuleSoft-based API flows using DataWeave for transformations.",
-      "Configured CloudHub APIs with OAuth2 & rate-limiting security policies.",
-      "Improved workflow efficiency by 60% through optimized integrations.",
-      "Performed debugging, testing, and documentation for Java/Mule services."
+      "Developed Java-based integration solutions with MuleSoft to connect enterprise databases and file systems, reducing manual data processing by 60%.",
+      "Designed optimized database schemas, tables, and stored procedures that reduced query execution time by 15%.",
+      "Created interactive React dashboards for payroll, tax deductions, and employee performance, increasing HR operational efficiency by 35%."
     ],
     technologies: [
-      "Java", "Spring Boot", "MuleSoft",
-      "CloudHub", "DataWeave",
-      "OAuth2", "REST APIs",
-      "Git", "Maven"
+      "Java", "MuleSoft", "React",
+      "SQL", "Database Design", "Stored Procedures"
     ]
   },
   {
-    id: 3,
+    id: 4,
     type: "work",
-    title: "Web Developer Intern",
+    title: "Web Development Intern",
     company: "Cureeya",
-    date: "Jun 2021 – Sep 2021",
+    date: "Jul 2021 – Sep 2021",
     location: "Bangalore, India",
     description: [
-      "Developed patient dashboards and scheduling features using React.",
-      "Built Java backend services for authentication and secure data access.",
-      "Improved rendering performance by 30% with React optimizations.",
-      "Integrated APIs ensuring HIPAA-compliant data handling.",
-      "Fixed UI bugs and enhanced dashboard stability reducing issues by 40%."
+      "Developed responsive patient dashboards and appointment scheduling interfaces using React, hooks, and component state management.",
+      "Engineered Java backend services for user authentication and data management, connecting the React frontend securely to healthcare databases.",
+      "Improved page load times by 20% through efficient React rendering patterns and backend service optimization."
     ],
     technologies: [
       "React", "JavaScript", "Java",
@@ -67,7 +76,7 @@ export const experiences: Experience[] = [
   }
 ];
 
-// Helper function to convert "Jun 2022 – Jul 2023" → dates
+// Helper function to convert "Jun 2022 – Jul 2023" to dates.
 const parseDateRange = (dateRange: string): { start: Date; end: Date } => {
   const [startStr, endStr] = dateRange.split("–").map(str => str.trim());
 
@@ -92,5 +101,5 @@ export const getTotalWorkExperience = (): number => {
   });
 
   const years = totalMonths / 12;
-  return parseFloat(years.toFixed(1)); // round to 1 decimal (e.g., 2.1 yrs)
+  return parseFloat(years.toFixed(1));
 };

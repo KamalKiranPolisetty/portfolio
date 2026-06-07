@@ -3,7 +3,7 @@ export interface Project {
   id: number;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   technologies: string[];
   githubLink?: string;
   liveLink?: string;
@@ -74,7 +74,7 @@ export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 export type AnimationDirection = 'up' | 'down' | 'left' | 'right';
 
 // API Response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -92,6 +92,6 @@ export interface ImportMetaEnv {
   readonly VITE_HOTJAR_SITE_ID: string;
 }
 
-interface ImportMeta {
+export interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
